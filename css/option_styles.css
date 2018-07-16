@@ -1,0 +1,33 @@
+.heading {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 10px;
+}
+pre {
+    margin-top: 0;
+}
+h2 {
+    margin: 0;
+}
+#wrapper {
+    width: 100%;
+}
+input {
+    float: right;
+}
+.input {
+    width: 20%;
+}
+.text {
+    width: 80%;
+    text-align: left;
+}
+tr:hover {
+    border-radius: 5px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.02);
+}
+.spacer {
+    height: 100%;
+    margin-left: 20px;
+}

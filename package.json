@@ -1,0 +1,38 @@
+{
+  "name": "dixytool",
+  "version": "1.0.0",
+  "description": "A extension for firefox mobile to help people with dyslexia",
+  "main": "borderify.js",
+  "scripts": {
+    "compile": "tsc -p .",
+    "watch": "tsc -w",
+    "android": "web-ext run --target=firefox-android --android-device=????????",
+    "test": "web-ext run",
+    "clean": "rm -Rf js",
+    "gulp": "gulp",
+    "release": "cd dist && web-ext build && cd .. && mv dist/web-ext-artifacts/dyxitool-1.0.zip dyxitool.xpi && rm -d dist/web-ext-artifacts",
+    "push": "adb push dyxitool.xpi /mnt/sdcard"
+  },
+  "keywords": [
+    "firefox",
+    "extension",
+    "medical",
+    "dyslexia",
+    "android"
+  ],
+  "author": "Sam Clercky",
+  "license": "ISC",
+  "dependencies": {
+    "@types/firefox-webext-browser": "^58.0.3"
+  },
+  "devDependencies": {
+    "@types/chrome": "0.0.69",
+    "@types/jquery": "^3.3.4",
+    "gulp": "^3.9.1",
+    "gulp-clean-css": "^3.9.4",
+    "gulp-jsonminify": "^1.1.0",
+    "gulp-minify-html": "^1.0.6",
+    "gulp-uglify-es": "^1.0.4",
+    "pump": "^3.0.0"
+  }
+}
