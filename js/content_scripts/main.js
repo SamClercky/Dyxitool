@@ -24,18 +24,58 @@ class AppScreen {
         this.client = new Client();
         this.db = new Db();
         this.cscreen = new CScreen();
-        this.prefabStyle = {
-            "font": '*, html, body, h1, h2, h3, h4, h5, h6, p, span, div, code{font-family: "OpenDyslexic" !important; line-height: 150%;} code,pre{font-family: OpenDyslexicMono !important;}',
-            "color": "#" + this.cscreen.id + ' {background: {0} !important;}',
-            "opacity": "#" + this.cscreen.id + ' {opacity: {0} !important;}',
-            "markup": "p, span, div, code { text-align: justify !important;text-justify: inter-word !important;background: white !important;color: #333 !important;line-height: 1.5 !important;font-size: 1em !important;}"
-        };
+        this.prefabStyle = AppScreen.constructPrefabFont(this.cscreen);
         this.styleElements = [];
         this.settings = this.db._settings;
         this.enableBackground = false;
         insertCssFont();
         this.init = this.init.bind(this);
         this.db.onReady(this.init);
+    }
+    static constructPrefabFont(cscreen) {
+        const concatSelectors = (prev, curr) => {
+            return (prev === "") ? curr : `${prev}, ${curr}`;
+        };
+        const fontSelectorExceptions = [
+            "",
+            ".fab",
+            ".fa",
+            ".glyphicon",
+        ].reduce((prev, curr) => `${prev}:not(${curr})`);
+        const fontSelectorNormal = [
+            "",
+            "html",
+            "body",
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "h6",
+            "p",
+            "span",
+            "div",
+            "a",
+        ].map(item => (item === "") ? item : item + fontSelectorExceptions)
+            .reduce(concatSelectors);
+        const fontSelectorMono = [
+            "",
+            "code",
+            "pre",
+        ].reduce(concatSelectors);
+        const markupSelector = [
+            "",
+            "p",
+            "span",
+            "div",
+            "code",
+        ].reduce(concatSelectors);
+        return {
+            "font": fontSelectorNormal + ' {font-family: "OpenDyslexic" !important; } ' + fontSelectorMono + '{font-family: OpenDyslexicMono !important;}',
+            "color": "#" + cscreen + ' {background: {0} !important;}',
+            "opacity": "#" + cscreen + ' {opacity: {0} !important;}',
+            "markup": markupSelector + " { text-align: justify !important;text-justify: inter-word !important;background: white !important;color: #333 !important;line-height: 1.5 !important;font-size: 1em !important;}"
+        };
     }
     init() {
         Log.info("Db started, init layout");

@@ -1,7 +1,11 @@
-const DEBUGGING = true;
+const DEBUGGING = false;
 const PREFIX = "dyxitool - ";
 class Log {
     static info(msg) {
+        if (DEBUGGING)
+            console.info(PREFIX + msg);
+    }
+    static log(msg) {
         if (DEBUGGING)
             console.log(PREFIX + msg);
     }

@@ -40,12 +40,7 @@ class AppScreen {
     readonly client = new Client()
     readonly db = new Db()
     readonly cscreen = new CScreen()
-    readonly prefabStyle: Styles = {
-        "font": '*, html, body, h1, h2, h3, h4, h5, h6, p, span, div, code{font-family: "OpenDyslexic" !important; line-height: 150%;} code,pre{font-family: OpenDyslexicMono !important;}',
-        "color": "#" + this.cscreen.id + ' {background: {0} !important;}',
-        "opacity": "#" + this.cscreen.id + ' {opacity: {0} !important;}',
-        "markup": "p, span, div, code { text-align: justify !important;text-justify: inter-word !important;background: white !important;color: #333 !important;line-height: 1.5 !important;font-size: 1em !important;}"
-    }
+    readonly prefabStyle: Styles = AppScreen.constructPrefabFont(this.cscreen);
     
     styleElements: HTMLStyleElement[] = []
     settings: Settings = this.db._settings
@@ -55,6 +50,57 @@ class AppScreen {
         insertCssFont() // add support for OpenDyslexic
         this.init = this.init.bind(this)
         this.db.onReady(this.init)
+    }
+
+    private static constructPrefabFont(cscreen: CScreen): Styles {
+        const concatSelectors = (prev: string, curr: string) => {
+            return (prev === "") ? curr : `${prev}, ${curr}`;
+        }
+
+        const fontSelectorExceptions = [
+            "", // Anders ==> .fab:not(.glyphicon):not(...)
+            ".fab",
+            ".fa",
+            ".glyphicon",
+        ].reduce((prev, curr) => `${prev}:not(${curr})`);
+
+        const fontSelectorNormal = [
+            "", // Zie fontSelectorExceptions
+            "html",
+            "body",
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "h6",
+            "p",
+            "span",
+            "div",
+            "a",
+        ].map(item => (item === "") ? item : item + fontSelectorExceptions)
+        .reduce(concatSelectors);
+
+        const fontSelectorMono = [
+            "", // Zie fontSelectorException
+            "code",
+            "pre",
+        ].reduce(concatSelectors);
+
+        const markupSelector = [
+            "", // Zie fontSelectorException
+            "p",
+            "span",
+            "div",
+            "code",
+        ].reduce(concatSelectors);
+        
+        return {
+            "font": fontSelectorNormal + ' {font-family: "OpenDyslexic" !important; } ' + fontSelectorMono + '{font-family: OpenDyslexicMono !important;}',
+            "color": "#" + cscreen + ' {background: {0} !important;}',
+            "opacity": "#" + cscreen + ' {opacity: {0} !important;}',
+            "markup": markupSelector + " { text-align: justify !important;text-justify: inter-word !important;background: white !important;color: #333 !important;line-height: 1.5 !important;font-size: 1em !important;}"
+        }
     }
 
     private init() {
@@ -271,6 +317,12 @@ class AppScreen {
 }
 
 let app = new AppScreen() // start application
+
+// window.addEventListener("load", () => {
+//     // at load walk dom tree and eliminate glyphs
+//     setTimeout(async () => {await glyphprotection();}, 6000);
+//     // setInterval(async () => { await glyphprotection()}, 10000);
+// });
 // Log.debugRaw(app)
 // Log.info("App started!!!")
 
