@@ -19,7 +19,7 @@ class AppPopup {
         Log.info("Db started, Init menu")
         this.createMenu()
         $('a').on('click', () => {
-            browser.tabs.create({url: $(this).attr('href')})
+            getBrowser().tabs.create({url: $(this).attr('href')})
             return true
         })
     }

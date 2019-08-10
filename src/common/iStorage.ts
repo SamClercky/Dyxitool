@@ -110,7 +110,7 @@ class Db {
      */
     get(name: string): Promise<PackedSetting> {
         return new Promise<PackedSetting>((res, rej) => {
-            browser.storage.local.get(name)
+            getLocalStorage(name)
                 .then(obj => {
                     if (name == undefined || name == "") {
                         res(obj)
@@ -143,7 +143,7 @@ class Db {
      * @param data The data to add
      */
     private insert(data: Setting): Promise<void> {
-        return browser.storage.local.set(data);
+        return getBrowser().storage.local.set(data);
     }
 
     /**
@@ -167,7 +167,7 @@ class Db {
     }
 
     onChange(cb: {(changes: browser.storage.StorageChange, name: string, area: string): void}): void {
-        browser.storage.onChanged.addListener((changes, area) => {
+        getBrowser().storage.onChanged.addListener((changes, area) => {
             const name = Object.keys(changes)[0];
             cb(changes[name], name, area)
         });
