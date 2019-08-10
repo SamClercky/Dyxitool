@@ -1,5 +1,5 @@
 class Db {
-    _settings: Settings = {
+    static readonly initialSettings: Settings = {
         dyslexic: { // all settings on or off
             value: true,
             type: Type.checkbox,
@@ -51,56 +51,67 @@ class Db {
         }
     };
 
-    private onReadyCb: {(): void}[] = []
+    private localCache = Object.assign(Db.initialSettings);
+
+    private onReadyCb: { (): void }[] = [];
 
     private _dataName = "settings";
-    private _ready = false;
+    private ready = false;
 
     /**
      * Packs the setting in a easy to use format
      * @param name The key needed to get the setting
      * @returns false if not founded and {name: Setting} if found
+     * @throws When name does not exist
      */
-    private getSettingByName(name: string, data: Setting): any | boolean {
-        if (!this.dataExists(name)) return false;
+    private getSettingByName(name: string): any {
+        if (!this.dataExists(name)) throw Error("Data does not exist");
         let result = {};
-        result[name] = this._settings[name];
+        result[name] = this.localCache[name];
         return result;
     }
 
     private dataExists(name: string): boolean {
-        for (let key of Object.keys(this._settings)) {
-            if (key == name) return true;
-        }
-        return false;
+        const result = Db.initialSettings[name];
+        if (result == undefined) return false;
+        else                     return true;
     }
 
     constructor() {
         // check for the first run
         // cache this
         //let $this = this;
-        this.get("_firstRunPassed")
-            .then(data => {
-                if (data.value != undefined) {
-                    this._ready = true;
-                    // tell everyone the db is ready
-                    if (this.onReadyCb != null) {
-                        this.fireReady()
-                    }
-                    return;
-                }
+        async function init () {
+            const firstRunPassed = await this.get("_firstRunPassed");
 
-                for (let i in this._settings) {
-                    this.insert(this.getSettingByName(i, this._settings[i]));
-                }
-                this._ready = true;
+            // if run for first time ==> initialize
+            if (firstRunPassed || firstRunPassed.value != undefined) { // if it is not null
+                // already initialized ==> start program
 
+                this.ready = true
                 // tell everyone the db is ready
                 if (this.onReadyCb != null) {
                     this.fireReady()
                 }
+                return;                
+            } else {
+                // not yet initialized ==> create db in storage.local
+
+                for (let i in Db.initialSettings) {
+                    this.insert(this.getSettingByName(i));
+                }
+
+                // make shure that it does not get intialized twise
                 this.update("_firstRunPassed", true);
-            })
+                
+                // tell everyone the db is ready and start program
+                this.ready = true;
+                if (this.onReadyCb != null) {
+                    this.fireReady()
+                }
+            }
+        };
+        init()
     }
 
     // DB operations
@@ -108,26 +119,53 @@ class Db {
      * Get a field from the db
      * @param name The name of the field to retrieve !CAUTION! name != "" or it will return Settings
      */
-    get(name: string): Promise<PackedSetting> {
-        return new Promise<PackedSetting>((res, rej) => {
-            browser.storage.local.get(name)
-                .then(obj => {
-                    if (name == undefined || name == "") {
-                        res(obj)
-                    } else {
-                        res(this.stripData(obj))
-                    }
-                })
-                .catch(err => {
-                    Log.error(err)
-                    rej(err)
-                })
-        })
+    async get(name: string): Promise<PackedSetting> {
+        const result = await browser.storage.local.get(name)
+
+        if (name == undefined || name == "") {
+            return null;
+        } else {
+            return this.stripData(result);
+        }
 
         //return browser.storage.local.get(name);
     }
 
-    stripData(setting: object): PackedSetting {      
+    /**
+     * Gets all the information that is stored in the database and caches it for later use
+     *
+     * @return  {Promise<Settings>}  The content of the storage or if nothing is stored, the localCache
+     * @throws When no data could be retrieved
+     */
+    async getAll(): Promise<Settings> {
+        const result = await browser.storage.local.get(null); // Gets all data at once
+        if (result == undefined || result == "") {
+            return this.localCache;
+        } else {
+            this.localCache = result;
+            return result as Settings;
+        }
+    }
+
+    /**
+     * Loads data from local cache (fast)
+     *
+     * @param   {string}  name  The name of the property you would want
+     *
+     * @return  {Setting}        The requested setting
+     * @throws When no data is found
+     */
+    getFromCache(name: string) {
+        if (!this.dataExists(name)) throw Error("No data found for " + name);
+        
+        return this.localCache[name];
+    }
+
+    getAllFromCache() {
+        return this.localCache;
+    }
+
+    stripData(setting: object): PackedSetting {
         let name = Object.keys(setting)[0]
         let value = setting[name] as Setting
 
@@ -135,11 +173,11 @@ class Db {
             name: name,
             value: value
         }
-    } 
+    }
 
     /**
      * Add a new data element to the db.
-     * !IMPORTANT! this api does can override existing sources
+     * !IMPORTANT! this api can override existing sources
      * @param data The data to add
      */
     private insert(data: Setting): Promise<void> {
@@ -151,35 +189,29 @@ class Db {
      * @param name The name of the value to change
      * @param value The new value
      */
-    update(name: string, value: SettingValue): Promise<any> {
-        return new Promise<any>((res: {(): void}, rej: {(string): void}) => {
-            // check if the value exists
-            if (!this.dataExists(name)) {
-                rej("Value did not exist");
-                return;
-            }
+    async update(name: string, value: SettingValue): Promise<void> {
+        if (!this.dataExists(name)) {
+            throw Error("Value did not exist");
+        }
 
-            this._settings[name].value = value;
-
-            this.insert(this.getSettingByName(name, this._settings[name]));
-            res();
-        })
+        this.localCache[name].value = value; // store in local cache
+        this.insert(this.getSettingByName(name));
     }
 
-    onChange(cb: {(changes: browser.storage.StorageChange, name: string, area: string): void}): void {
+    onChange(cb: { (changes: browser.storage.StorageChange, name: string, area: string): void }): void {
         browser.storage.onChanged.addListener((changes, area) => {
             const name = Object.keys(changes)[0];
             cb(changes[name], name, area)
         });
     }
 
-    onReady(cb: {(): void}) {
-        if (this._ready) cb() // return immediatly
+    onReady(cb: { (): void }) {
+        if (this.ready) cb() // return immediatly
         else this.onReadyCb.push(cb) // otherwise wait for being finished
     }
 
     private fireReady() {
-        for(let cb of this.onReadyCb) {
+        for (let cb of this.onReadyCb) {
             cb()
         }
     }
