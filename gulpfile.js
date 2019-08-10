@@ -1,52 +1,95 @@
-var gulp = require("gulp");
-var cleanCSS = require("gulp-clean-css");
-var minifyHTML = require('gulp-minify-html');
-var uglify = require('gulp-uglify-es').default;
-var pump = require('pump');
-var jsonminify = require('gulp-jsonminify');
+const gulp = require("gulp");
+const cleanCSS = require("gulp-clean-css");
+const minifyHTML = require('gulp-minify-html');
+const uglify = require('gulp-uglify-es').default;
+const jsonminify = require('gulp-jsonminify');
+const rm = require('gulp-rm');
+const rename = require("gulp-rename");
 
-gulp.task("default", ["minify-css", "minify-html", "minify-js", "minify-manifest", "copy-lib", "copy-font", "copy-img"])
-
-gulp.task("minify-css", () => {
-    return gulp.src("css/*.css")
+function minifyCss(cb) {
+    gulp.src("css/*.css")
         .pipe(cleanCSS({compatibility: 'ie8'}))
-        .pipe(gulp.dest("dist/css"))
-});
-gulp.task("minify-html", () => {
+        .pipe(gulp.dest("dist/css"));
+
+    return cb();
+}
+exports.minifyCss = minifyCss;
+
+function minifyHtml(cb) {
     var opts = {comments:true,spare:true};
     
     gulp.src('html/*.html')
         .pipe(minifyHTML(opts))
-        .pipe(gulp.dest('dist/html'))
-});
-gulp.task("minify-js", () => {
+        .pipe(gulp.dest('dist/html'));
+
+    return cb();
+}
+exports.minifyHtml = minifyHtml;
+
+function minifyJs(cb) {
     gulp.src("js/**/*.js")
         .pipe(uglify())
         .pipe(gulp.dest("dist/js"));
-});
-gulp.task('minify-js', (cb) => {
-    pump([
-          gulp.src('js/**/*.js'),
-          uglify(),
-          gulp.dest('dist/js')
-      ],
-      cb
-    );
-  });
-gulp.task("copy-lib", () => {
+    return cb();
+}
+exports.minifyJs = minifyJs;
+
+function copyLib(cb) {
     gulp.src("lib/*.js")
-        .pipe(gulp.dest("dist/lib"))
-})
-gulp.task('minify-manifest', () => {
-    gulp.src("manifest.json")
+        .pipe(gulp.dest("dist/lib"));
+    return cb();
+}
+exports.copyLib = copyLib;
+
+function minifyManifest(cb) {
+    gulp.src("./manifest*.json")
         .pipe(jsonminify())
-        .pipe(gulp.dest("dist"))
-})
-gulp.task("copy-font", () => {
-    gulp.src("fonts/*")
-        .pipe(gulp.dest("dist/fonts"));
-})
-gulp.task("copy-img", () => {
-    gulp.src("img/**/*")
-        .pipe(gulp.dest("dist/img"))
-})
+        .pipe(gulp.dest("./dist"));
+    return cb();
+}
+exports.minifyManifest = minifyManifest;
+
+function copyFont(cb) {
+    gulp.src("./fonts/*")
+        .pipe(gulp.dest("./dist/fonts"));
+    return cb();
+}
+exports.copyFont = copyFont;
+
+function copyImg(cb) {
+    gulp.src("./img/**/*")
+        .pipe(gulp.dest("./dist/img"));
+
+    return cb();
+}
+exports.copyLib = copyImg;
+
+exports.default = gulp.series(minifyCss, minifyHtml, minifyJs, minifyManifest, copyLib, copyFont, copyImg);
+
+function deleteFileList(list) {
+    gulp.src(list, {read: false})
+        .pipe(rm());
+}
+
+// function finalizeChrome(cb) {
+//     deleteFileList([
+//         "./dist/manifest-firefox.json",
+//     ]);
+//     gulp.src("./dist/manifest-chrome.json")
+//         .pipe(rename("manifest.json"))
+//         .pipe(gulp.dest("./dist"));
+
+//     return cb();
+// }
+// exports.finalizeChrome = finalizeChrome;
+
+// function finalizeFirefox(cb) {
+//     deleteFileList([
+//         "./dist/manifest-chrome.json",
+//         "./dist/js/common/chromepatch.js"
+//     ]);
+//     gulp.src("./dist/manifest-firefox.json")
+//         .pipe(rename("manifest.json"))
+//         .pipe(gulp.dest("./dist"));
+// }
+// exports.finalizeFirefox = finalizeFirefox;
