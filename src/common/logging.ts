@@ -2,16 +2,20 @@ const DEBUGGING = true;
 const PREFIX = "dyxitool - ";
 
 class Log {
-    static info(msg: string) {
-        if (DEBUGGING) console.info(PREFIX + msg);
+    static info(msg: any) {
+        if (DEBUGGING) console.info(PREFIX, msg);
     }
 
-    static log(msg: string) {
-        if (DEBUGGING) console.log(PREFIX + msg);
+    static log(msg: any) {
+        if (DEBUGGING) console.log(PREFIX, msg);
     }
 
-    static error(msg: string) {
-        if (DEBUGGING) console.error(PREFIX + msg);
+    static warn(msg: any) {
+        if (DEBUGGING) console.warn(PREFIX, msg);
+    }
+
+    static error(msg: any) {
+        if (DEBUGGING) console.error(PREFIX, msg);
     }
 
     static debugRaw(object: any) {

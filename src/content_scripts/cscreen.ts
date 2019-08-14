@@ -25,6 +25,9 @@ class CScreen {
         this.object = document.createElement("div") as HTMLDivElement
         this.object.setAttribute("id", this.id)
 
+        // cosmetic improvemnt
+        this.object.style.transition = "width 0.05s, height 0.05s, left 0.05s, top 0.05s";
+
         this.setVisible(true)
         this.object.style.position = "absolute"
         this.object.style.zIndex = "1000"

@@ -11,7 +11,7 @@
     "clean": "rm -Rf js",
     "gulp": "gulp",
     "release": "cd dist && web-ext build && cd .. && mv dist/web-ext-artifacts/dyxitool-1.0.zip dyxitool.xpi && rm -d dist/web-ext-artifacts",
-    "push": "adb push dyxitool.xpi /mnt/sdcard"
+    "push_android": "adb push dyxitool.xpi /mnt/sdcard"
   },
   "keywords": [
     "firefox",

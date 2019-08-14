@@ -18,7 +18,6 @@
     },
 
     "permissions": [
-      "tabs",
       "storage"
     ],
   
@@ -33,7 +32,7 @@
           "js/common/iStorage.js",
           "js/content_scripts/insertCssFont.js",
           "js/content_scripts/cscreen.js",
-          "js/content_scripts/client.js",
+          "js/content_scripts/settingsState.js",
           "js/content_scripts/main.js"
         ]
       }

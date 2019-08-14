@@ -16,7 +16,7 @@ interface Setting {
 }
 interface PackedSetting {
     name: string,
-    value: Setting
+    value: SettingValue
 }
 enum Type {
     checkbox = "checkbox",
