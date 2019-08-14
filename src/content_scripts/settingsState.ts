@@ -3,13 +3,7 @@ type OnStateChangedFunc = {(settingsState: Settings): void};
 class SettingsStateNotifier {
     private onStateChange: OnStateChangedFunc[] = []
 
-    constructor(client: Client, storage: Db) {
-        // client.onResponse()
-        //     .then((packedSetting: PackedSetting) => {
-        //         // when new signal is received ==> update view
-        //         storage.updateCache(packedSetting);
-        //         this.handleChange(storage.getAllFromCache());
-        //     });
+    constructor(storage: Db) {
         storage.onChange((changes, name, area) => {
             // TODO: add implementation or see if it is realy needed
             Log.warn("Storage onChange is used, is this realy needed?");

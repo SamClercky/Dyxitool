@@ -3,7 +3,6 @@
 /// <reference path="../common/iStorage.ts" />
 /// <reference path="../common/logging.ts" />
 
-/// <reference path="./client.ts" />
 /// <reference path="./cscreen.ts" />
 /// <reference path="./insertCssFont.ts" />
 /// <reference path="./settingsState.ts" />
@@ -46,12 +45,11 @@ String.prototype.format = function (args) {
 };
 String.prototype.format.regex = new RegExp("{-?[0-9]+}", "g");
 
-class AppScreen {    
-    readonly client = new Client()
+class AppScreen {
     readonly db = new Db()
     readonly cscreen = new CScreen()
     readonly prefabStyle: Styles = AppScreen.constructPrefabFont(this.cscreen);
-    readonly settingsStateNotifier: SettingsStateNotifier = new SettingsStateNotifier(this.client, this.db);
+    readonly settingsStateNotifier: SettingsStateNotifier = new SettingsStateNotifier( this.db);
     
     private styleElements = {
         font: HTMLStyleElement,
@@ -202,22 +200,6 @@ class AppScreen {
     }
 
     /**
-     * @deprecated
-     */
-    private initLayout(): void {
-        Log.warn("Deprecated initLayout has been called");
-        // for (let name in this.db.getAllFromCache()) {
-        //     if (name.startsWith("_")) continue
-
-        //     this.db.get(name)
-        //         .then((obj) => {
-        //             Log.debugRaw(obj)
-        //             this.createLayoutItem(obj.name, obj.value)
-        //         })
-        // }
-    }
-
-    /**
      * Controls everything concerning the mechanics of the overlay
      */
     private initBackground(): void {
@@ -257,141 +239,6 @@ class AppScreen {
         }
     }
 
-    /**
-     * @deprecated
-     *
-     * @param   {string}   name   Name of setting to be handled
-     * @param   {Setting}  value  New Value
-     */
-    private changeLayoutItem(name: string, value: Setting): void {
-        Log.warn("Deprecated changeLayoutItem has been called");
-        // Log.info(`changeLayoutItem called with arguments: name: ${name} and value: ${value}`)
-        // this.settings[name].value = value;
-    
-        // switch (name) {
-        //     case "dyslexic":
-        //         if (!this.toBool(value.value)) {
-        //             for (var item in this.styleElements) { // turn everything off
-        //                 this.styleElements[item].disabled = true;
-        //             }
-        //             this.enableBackground = false;
-        //         } else {
-        //             for (var item in this.styleElements) { // turn everything while looking at the other settings
-        //                 if (!this.settings["screen"].value && this.styleElements[item].getAttribute("data") == "color") {
-        //                     this.styleElements[item].disabled = true;
-        //                     continue;
-        //                 }
-        //                 if (!this.settings["font"].value && this.styleElements[item].getAttribute("data") == "font") {
-        //                     this.styleElements[item].disabled = true;
-        //                     continue;
-        //                 }
-        //                 if (!this.settings["markup"].value && this.styleElements[item].getAttribute("data") == "markup") {
-        //                     this.styleElements[item].disabled = true;
-        //                     continue;
-        //                 }
-        //                 this.styleElements[item].disabled = false;
-        //             }
-        //             if (this.settings["screen"].value)
-        //                 this.enableBackground = true;
-        //             else
-        //                 this.enableBackground = false;
-        //         }
-        //         break;
-        //     case "font":
-        //         for (var item in this.styleElements) {
-        //             if (this.styleElements[item].getAttribute("data") == "font") {
-        //                 var entry = document.createTextNode(this.prefabStyle.font);
-        //                 if (this.styleElements[item].childNodes[0])
-        //                     this.styleElements[item].removeChild(this.styleElements[item].childNodes[0]);
-        //                 this.styleElements[item].appendChild(entry);
-    
-        //                 // check if dyslexic is enabled
-        //                 if (!this.settings["dyslexic"].value) {
-        //                     this.styleElements[item].disabled = true;
-        //                     break;
-        //                 }
-        //                 // otherwise
-        //                 if (this.toBool(value.value) == false) {
-        //                     this.styleElements[item].disabled = true;
-        //                 } else {
-        //                     this.styleElements[item].disabled = false;
-        //                 }
-        //                 break;
-        //             }
-        //         }
-        //         break;
-        //     case "markup":
-        //         for (var item in this.styleElements) {
-        //             if (this.styleElements[item].getAttribute("data") == "markup") {
-        //                 var entry = document.createTextNode(this.prefabStyle["markup"]);
-        //                 if (this.styleElements[item].childNodes[0])
-        //                     this.styleElements[item].removeChild(this.styleElements[item].childNodes[0]);
-        //                 this.styleElements[item].appendChild(entry);
-    
-        //                 // check if dyslexic is enabled
-        //                 if (!this.settings["dyslexic"].value) {
-        //                     this.styleElements[item].disabled = true;
-        //                     break;
-        //                 }
-        //                 // otherwise
-        //                 if (this.toBool(value.value) == false) {
-        //                     this.styleElements[item].disabled = true;
-        //                 } else {
-        //                     this.styleElements[item].disabled = false;
-        //                 }
-        //                 break;
-        //             }
-        //         }
-        //         break;
-        //     case "screen":
-        //         if (!this.toBool(value.value)) {
-        //             for (var item in this.styleElements) {
-        //                 if (this.styleElements[item].getAttribute("data") == "color") {
-        //                     this.styleElements[item].disabled = true;
-        //                     break;
-        //                 }
-        //             }
-        //             this.enableBackground = false;
-        //         } else {
-        //             for (var item in this.styleElements) {
-        //                 if (this.settings["dyslexic"].value && this.styleElements[item].getAttribute("data") == "color") {
-        //                     this.styleElements[item].disabled = false;
-        //                     this.enableBackground = true;
-        //                     break;
-        //                 }
-        //             }
-        //         }
-        //         break;
-        //     case "color":
-        //         for (var item in this.styleElements) {
-        //             if (this.styleElements[item].getAttribute("data") == "color") {
-        //                 var entry = document.createTextNode(this.prefabStyle["color"]
-        //                     .format([Color.fromObject(value.value as BasicColor).colorHex]));
-        //                 if (this.styleElements[item].childNodes[0])
-        //                     this.styleElements[item].removeChild(this.styleElements[item].childNodes[0]);
-        //                 this.styleElements[item].appendChild(entry);
-        //                 if (!this.settings["screen"].value || !this.settings["dyslexic"].value)
-        //                     this.styleElements[item].disabled = true;
-        //                 break;
-        //             }
-        //         }
-        //         break;
-        //     case "opacity":
-        //         for (var item in this.styleElements) {
-        //             if (this.styleElements[item].getAttribute("data") == "opacity") {
-        //                 var entry = document.createTextNode(this.prefabStyle["opacity"].format([value.value]));
-        //                 if (this.styleElements[item].childNodes[0])
-        //                     this.styleElements[item].removeChild(this.styleElements[item].childNodes[0]);
-        //                 this.styleElements[item].appendChild(entry);
-        //                 if (!this.settings["screen"].value || !this.settings["dyslexic"].value)
-        //                     this.styleElements[item].disabled = true;
-        //                 break;
-        //             }
-        //         }
-        //         break;
-        // }
-    }
-
     private getPos(elem: Element): Rect {
         let body = document.body
 
@@ -415,13 +262,6 @@ class AppScreen {
         }
 
         return pos
-    }
-
-    private toBool(value: SettingValue): boolean {
-        if (typeof value == "boolean")
-            return value
-        else
-            return null
     }
 }
 

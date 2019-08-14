@@ -1,4 +1,3 @@
-/// <reference path="./Server.ts" />
 /// <reference path="../common/Color.ts" />
 /// <reference path="../common/CommunicationInterface.ts" />
 /// <reference path="../common/iStorage.ts" />
@@ -125,11 +124,6 @@ class AppPopup {
 
     private onChangeSet(evt: Event) {
         const target = evt.target as HTMLInputElement
-        /*let value: SettingValue = ((target.type == Type.checkbox)? target.checked : target.value) as SettingValue
-        value = ((target.type == Type.range)? (Color.fromObject(
-                this._settings["color"].value as BasicColor
-            ).colorAlpha / 100).toString() : value) as SettingValue
-        value = (target.type == Type.color)? Color.fromHex(target.value): value*/
 
         let value: SettingValue;
         switch (target.type) {
@@ -145,21 +139,11 @@ class AppPopup {
             // may cause bug if Color is not updated
         }
         // save changes
-        // this.db.getAllFromCache()[target.getAttribute("data")].value = value
         this.db.update(target.getAttribute("data"), value as SettingValue)
 
         this.toggleData(
             this.db.getAllFromCache()
         )
-
-        // @Deprecated functionality ==> know via iStorage and onChange
-        // let s = new Server()
-        // s.send(
-        //     {
-        //         name: target.getAttribute("data"),
-        //         value: value as SettingValue,
-        //     }
-        // )
     }
 
     private toggleData(settings: Settings) {
