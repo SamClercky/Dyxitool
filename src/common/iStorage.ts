@@ -51,7 +51,7 @@ class Db {
         }
     };
 
-    private localCache = Object.assign(Db.initialSettings);
+    private localCache: Settings = Object.assign(Db.initialSettings);
 
     private onReadyCb: { (): void }[] = [];
 
@@ -81,14 +81,17 @@ class Db {
         // check for the first run
         // cache this
         //let $this = this;
-        async function init () {
-            const firstRunPassed = await this.get("_firstRunPassed");
+        let init = async () => {
+            const firstRunPassed = (await this.getAll())._firstRunPassed;
 
             // if run for first time ==> initialize
-            if (firstRunPassed || firstRunPassed.value != undefined) { // if it is not null
+            if (firstRunPassed != undefined || firstRunPassed.value == true) { // if it is not null
                 // already initialized ==> start program
-
                 this.ready = true
+
+                // update cache
+                this.localCache._firstRunPassed.value = true;
+
                 // tell everyone the db is ready
                 if (this.onReadyCb != null) {
                     this.fireReady()
@@ -111,6 +114,7 @@ class Db {
                 }
             }
         };
+        init = init.bind(this);
         init()
     }
 
@@ -121,6 +125,9 @@ class Db {
      */
     async get(name: string): Promise<PackedSetting> {
         const result = await browser.storage.local.get(name)
+
+        Log.info("GetMessage with name: " + name);
+        Log.info(result);
 
         if (name == undefined || name == "") {
             return null;
@@ -139,6 +146,10 @@ class Db {
      */
     async getAll(): Promise<Settings> {
         const result = await browser.storage.local.get(null); // Gets all data at once
+        
+        Log.info("getAll result:");
+        Log.info(result);
+        
         if (result == undefined || result == "") {
             return this.localCache;
         } else {
@@ -155,19 +166,42 @@ class Db {
      * @return  {Setting}        The requested setting
      * @throws When no data is found
      */
-    getFromCache(name: string) {
+    getFromCache(name: string): Setting {
         if (!this.dataExists(name)) throw Error("No data found for " + name);
         
+        Log.info("getFromCacke with name: " + name);
+        Log.info(this.localCache[name]);
+
         return this.localCache[name];
     }
 
-    getAllFromCache() {
+    /**
+     * Get all the stored data from cache. This may not be the latest data
+     *
+     */
+    getAllFromCache(): Settings {
         return this.localCache;
+    }
+
+    /**
+     * Update the local cache with a new operation
+     *
+     * @param   {PackedSetting}  newState  The changed setting
+     *
+     * @throws When newState.name is not a valid value
+     */
+    updateCache(newState: PackedSetting): void {
+        if (!this.dataExists(newState.name)) throw Error("No data found for " + newState.name);
+
+        this.localCache[newState.name].value = newState.value;
+
+        Log.info("New updated cache is:")
+        Log.info(this.getAllFromCache());
     }
 
     stripData(setting: object): PackedSetting {
         let name = Object.keys(setting)[0]
-        let value = setting[name] as Setting
+        let value = setting[name].value as SettingValue
 
         return {
             name: name,
@@ -195,6 +229,10 @@ class Db {
         }
 
         this.localCache[name].value = value; // store in local cache
+        this.updateCache({
+            name: name,
+            value: value,
+        })
         this.insert(this.getSettingByName(name));
     }
 
@@ -210,7 +248,7 @@ class Db {
         else this.onReadyCb.push(cb) // otherwise wait for being finished
     }
 
-    private fireReady() {
+    private fireReady(): void {
         for (let cb of this.onReadyCb) {
             cb()
         }
