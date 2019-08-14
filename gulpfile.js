@@ -71,25 +71,28 @@ function deleteFileList(list) {
         .pipe(rm());
 }
 
-// function finalizeChrome(cb) {
-//     deleteFileList([
-//         "./dist/manifest-firefox.json",
-//     ]);
-//     gulp.src("./dist/manifest-chrome.json")
-//         .pipe(rename("manifest.json"))
-//         .pipe(gulp.dest("./dist"));
+function finalizeChrome(cb) {
+    deleteFileList([
+        "./dist/manifest-firefox.json",
+        "./dist/js/common/firefoxpatch.js",
+        "./dist/css/styles-firefox.css"
+    ]);
+    gulp.src("./dist/manifest-chrome.json")
+        .pipe(rename("manifest.json"))
+        .pipe(gulp.dest("./dist"));
 
-//     return cb();
-// }
-// exports.finalizeChrome = finalizeChrome;
+    return cb();
+}
+exports.finalizeChrome = finalizeChrome;
 
-// function finalizeFirefox(cb) {
-//     deleteFileList([
-//         "./dist/manifest-chrome.json",
-//         "./dist/js/common/chromepatch.js"
-//     ]);
-//     gulp.src("./dist/manifest-firefox.json")
-//         .pipe(rename("manifest.json"))
-//         .pipe(gulp.dest("./dist"));
-// }
-// exports.finalizeFirefox = finalizeFirefox;
+function finalizeFirefox(cb) {
+    deleteFileList([
+        "./dist/manifest-chrome.json",
+        "./dist/js/common/chromepatch.js",
+        "./dist/css/styles-chrome.css"
+    ]);
+    gulp.src("./dist/manifest-firefox.json")
+        .pipe(rename("manifest.json"))
+        .pipe(gulp.dest("./dist"));
+}
+exports.finalizeFirefox = finalizeFirefox;

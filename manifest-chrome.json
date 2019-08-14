@@ -7,7 +7,6 @@
         "48": "img/icons/icon.png"
     },
     "permissions": [
-        "tabs",
         "storage"
     ],
     "content_scripts": [
@@ -21,10 +20,13 @@
                 "js/common/Color.js",
                 "js/common/CommunicationInterface.js",
                 "js/common/iStorage.js",
+                "js/content_scripts/settingsState.js",
                 "js/content_scripts/insertCssFont.js",
                 "js/content_scripts/cscreen.js",
-                "js/content_scripts/client.js",
                 "js/content_scripts/main.js"
+            ],
+            "css": [
+                "css/styles-chrome.css"
             ]
         }
     ],
@@ -36,6 +38,9 @@
         "fonts/OpenDyslexicMono-Regular.otf"
     ],
     "browser_action": {
-        "page": "html/option_page.html"
-    }
+        "default_icon": "img/icons/icon.png",
+        "default_popup": "html/option_page.html",
+        "default_title": "Dyxitool"
+    },
+    "options_page": "html/option_page.html"
 }

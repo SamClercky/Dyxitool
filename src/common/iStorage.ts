@@ -145,7 +145,7 @@ class Db {
      * @throws When no data could be retrieved
      */
     async getAll(): Promise<Settings> {
-        const result = await browser.storage.local.get(null); // Gets all data at once
+        const result = await getLocalStorage(null); // Gets all data at once
         
         Log.info("getAll result:");
         Log.info(result);
