@@ -1,12 +1,16 @@
 class Server {
-    send(name: PackedSetting) {
+    send(msg: PackedSetting) {
         browser.tabs.query({})
             .then((tabs) => {
                 for (let tab of tabs) {
-                    browser.tabs.sendMessage(
-                        tab.id,
-                        name
-                    )
+                    try {
+                        browser.tabs.sendMessage(
+                            tab.id,
+                            msg
+                        )
+                    } catch (e) {
+                        console.error("Could not send message ", msg, " to tab with id ", tab.id);
+                    }
                 }
             })
     }
