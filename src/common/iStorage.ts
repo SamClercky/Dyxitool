@@ -228,7 +228,7 @@ class Db {
             throw Error("Value did not exist");
         }
 
-        this.localCache[name].value = value; // store in local cache
+        // store in local cache
         this.updateCache({
             name: name,
             value: value,
