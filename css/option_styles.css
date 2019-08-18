@@ -4,9 +4,7 @@
 }
 body {
     text-align: center;
-    background-size: cover;
-    min-width: 500px;
-    padding: 10px;
+    margin: 10px;
     font-size: 1rem;
 }
 .heading {
@@ -28,6 +26,7 @@ input {
 }
 .input {
     width: 20%;
+    text-align: right;
 }
 .text {
     width: 80%;

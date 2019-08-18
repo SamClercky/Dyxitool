@@ -94,27 +94,51 @@ class AppPopup {
         }
         tdName.appendChild(document.createTextNode(setting.label))
 
-        // set input
+        // Add elements to screen
+        // This section needs to come before the set inputs-section
+        dataInput.setAttribute("data", id)
+        tdData.appendChild(dataInput)
+        settingWrapper.appendChild(tdName)
+        settingWrapper.appendChild(tdData)
+        
+        this.wrapper.appendChild(settingWrapper)
+        
+        // set inputs
         tdData.className = "input"
         dataInput.type = setting.type
         if (setting.type == Type.range) {
+            dataInput.onchange = this.onChangeSet // onChange is type specific
             dataInput.setAttribute("max", "100")
             dataInput.setAttribute("min", "0")
 
             dataInput.value = (this.normalizeInput(setting.value) * 100).toString()
         } else if (setting.type == Type.checkbox) {
+            dataInput.onchange = this.onChangeSet // onChange is type specific
             dataInput.checked = this.normalizeInput(setting.value)
         } else if (setting.type == Type.color) {
-            dataInput.value = Color.fromObject(setting.value as BasicColor).colorHex
+            // dataInput.value = Color.fromObject(setting.value as BasicColor).colorHex
+            // Make shure this does not hide unintentionally
+            // @ts-ignore
+            $(dataInput).spectrum({
+                color: (setting.value as BasicColor)._hex,
+                change: (color => {
+                    // Pack the plain color as a OnChangeEvent
+                    // TODO: Find a more elegant way of doing this
+                    this.onChangeSet({
+                        target: {
+                            // @ts-ignore
+                            type: Type.color,
+                            value: `#${color.toHex()}`,
+                            getAttribute: attrName => {
+                                if (attrName !== "data") throw Error("Not supported")
+
+                                return id
+                            }
+                        }
+                    })
+                })
+            });
         }
-
-        dataInput.setAttribute("data", id)
-        dataInput.onchange = this.onChangeSet
-        tdData.appendChild(dataInput)
-        settingWrapper.appendChild(tdName)
-        settingWrapper.appendChild(tdData)
-
-        this.wrapper.appendChild(settingWrapper)
 
         return {
             input: dataInput,

@@ -51,7 +51,7 @@ class Db {
         }
     };
 
-    private localCache: Settings = Object.assign(Db.initialSettings);
+    private localCache: Settings = {...Db.initialSettings};
 
     private onReadyCb: { (): void }[] = [];
 
@@ -85,7 +85,7 @@ class Db {
             const firstRunPassed = (await this.getAll())._firstRunPassed;
 
             // if run for first time ==> initialize
-            if (firstRunPassed != undefined || firstRunPassed.value == true) { // if it is not null
+            if (firstRunPassed != undefined && firstRunPassed.value == true) { // if it is not null
                 // already initialized ==> start program
                 this.ready = true
 
@@ -145,12 +145,13 @@ class Db {
      * @throws When no data could be retrieved
      */
     async getAll(): Promise<Settings> {
-        const result = await getLocalStorage(null); // Gets all data at once
+        const result: Settings = await getLocalStorage(null); // Gets all data at once
         
         Log.info("getAll result:");
         Log.info(result);
-        
-        if (result == undefined || result == "") {
+
+        // Protect localCache from undefined values and return the most accurate values
+        if (result == undefined || result._firstRunPassed == undefined) {
             return this.localCache;
         } else {
             this.localCache = result;

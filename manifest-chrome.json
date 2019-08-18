@@ -39,8 +39,8 @@
     ],
     "browser_action": {
         "default_icon": "img/icons/icon.png",
-        "default_popup": "html/option_page.html",
+        "default_popup": "html/option_page-chrome.html",
         "default_title": "Dyxitool"
     },
-    "options_page": "html/option_page.html"
+    "options_page": "html/option_page-chrome.html"
 }

@@ -41,11 +41,12 @@
   ],
   "browser_action": {
     "default_icon": "img/icons/icon.png",
-    "default_popup": "html/option_page.html",
-    "default_title": "Dyxitool"
+    "default_popup": "html/option_page-firefox.html",
+    "default_title": "Dyxitool",
+    "browser_style": true
   },
   "options_ui": {
-    "page": "html/option_page.html",
+    "page": "html/option_page-firefox.html",
     "browser_style": true
   }
 }
