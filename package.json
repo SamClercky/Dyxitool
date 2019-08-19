@@ -1,16 +1,18 @@
 {
   "name": "dixytool",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A extension for firefox mobile to help people with dyslexia",
   "main": "borderify.js",
   "scripts": {
     "compile": "tsc -p .",
     "watch": "tsc -w",
     "android": "web-ext run --target=firefox-android --android-device=????????",
-    "test": "web-ext run",
-    "clean": "rm -Rf js",
-    "gulp": "gulp",
-    "release": "cd dist && web-ext build && cd .. && mv dist/web-ext-artifacts/dyxitool-1.0.zip dyxitool.xpi && rm -d dist/web-ext-artifacts",
+    "testFirefox": "web-ext run",
+    "clean": "gulp cleanDist",
+    "cleanAll": "gulp cleanAll",
+    "buildFirefox": "gulp firefox",
+    "firefox": "npm run buildFirefox && cd dist && web-ext build && cd .. && mv dist/web-ext-artifacts/dyxitool-1.1.zip dyxitool.xpi && rm -d dist/web-ext-artifacts",
+    "buildChrome": "gulp chrome",
     "push_android": "adb push dyxitool.xpi /mnt/sdcard"
   },
   "keywords": [

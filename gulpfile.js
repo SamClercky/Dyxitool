@@ -6,68 +6,96 @@ const jsonminify = require('gulp-jsonminify');
 const rm = require('gulp-rm');
 const rename = require("gulp-rename");
 
-function minifyCss(cb) {
-    gulp.src("css/*.css")
-        .pipe(cleanCSS({compatibility: 'ie8'}))
-        .pipe(gulp.dest("dist/css"));
+function minifyCss(exceptions) {
+    return cb => {
+        console.info(">>> minifyCss");
+        gulp.src(["css/*.css", ...exceptions])
+            .pipe(cleanCSS({ compatibility: 'ie8' }))
+            .pipe(gulp.dest("dist/css"));
 
-    return cb();
+        return cb();
+    }
 }
-exports.minifyCss = minifyCss;
+exports.minifyCss = minifyCss([]);
 
-function minifyHtml(cb) {
-    var opts = {comments:true,spare:true};
-    
-    gulp.src('html/*.html')
-        .pipe(minifyHTML(opts))
-        .pipe(gulp.dest('dist/html'));
+function minifyHtml(exceptions) {
+    return cb => {
+        console.info(">>> minifyHtml");
+        var opts = { comments: true, spare: true };
 
-    return cb();
+        gulp.src(['html/*.html', ...exceptions])
+            .pipe(minifyHTML(opts))
+            .pipe(gulp.dest('dist/html'));
+
+        return cb();
+    }
 }
-exports.minifyHtml = minifyHtml;
+exports.minifyHtml = minifyHtml([]);
 
-function minifyJs(cb) {
-    gulp.src("js/**/*.js")
-        .pipe(uglify())
-        .pipe(gulp.dest("dist/js"));
-    return cb();
+function minifyJs(exceptions) {
+    console.info(">>> minifyJs");
+    return cb => {
+        gulp.src(["js/**/*.js", ...exceptions])
+            .pipe(uglify())
+            .pipe(gulp.dest("dist/js"));
+        return cb();
+    }
 }
-exports.minifyJs = minifyJs;
+exports.minifyJs = minifyJs([]);
 
-function copyLib(cb) {
-    gulp.src("lib/*.js")
-        .pipe(gulp.dest("dist/lib"));
-    return cb();
+function copyLib(exceptions) {
+    return cb => {
+        console.info(">>> copyLib");
+        gulp.src(["lib/**/*", ...exceptions])
+            .pipe(gulp.dest("dist/lib"));
+        return cb();
+    }
 }
-exports.copyLib = copyLib;
+exports.copyLib = copyLib([]);
 
-function minifyManifest(cb) {
-    gulp.src("./manifest*.json")
-        .pipe(jsonminify())
-        .pipe(gulp.dest("./dist"));
-    return cb();
+function minifyManifest(exceptions) {
+    return cb => {
+        console.info(">>> minifyManifest");
+        gulp.src(["./manifest*.json", ...exceptions])
+            .pipe(jsonminify())
+            .pipe(rename("manifest.json"))
+            .pipe(gulp.dest("./dist"));
+        return cb();
+    }
 }
-exports.minifyManifest = minifyManifest;
+exports.minifyManifest = minifyManifest([]);
 
-function copyFont(cb) {
-    gulp.src("./fonts/*")
-        .pipe(gulp.dest("./dist/fonts"));
-    return cb();
+function copyFont(exceptions) {
+    return cb => {
+        console.info(">>> minifyFont");
+        gulp.src(["./fonts/*", ...exceptions])
+            .pipe(gulp.dest("./dist/fonts"));
+        return cb();
+    }
 }
-exports.copyFont = copyFont;
+exports.copyFont = copyFont([]);
 
-function copyImg(cb) {
-    gulp.src("./img/**/*")
-        .pipe(gulp.dest("./dist/img"));
+function copyImg(exceptions) {
+    return cb => {
+        console.info(">>> copyImg");
+        gulp.src(["./img/**/*", ...exceptions])
+            .pipe(gulp.dest("./dist/img"));
 
-    return cb();
+        return cb();
+    }
 }
-exports.copyLib = copyImg;
+exports.copyLib = copyImg([]);
 
-exports.default = gulp.series(minifyCss, minifyHtml, minifyJs, minifyManifest, copyLib, copyFont, copyImg);
+const copyAll = gulp.series([copyLib([]), copyFont([]), copyImg([])]);
+exports.copyAll = copyAll;
+
+const buildAll = gulp.series(minifyCss([]), minifyHtml([]), minifyJs([]), minifyManifest([]), copyAll);
+
+exports.buildAll = buildAll;
+exports.default = buildAll;
 
 function deleteFileList(list) {
-    gulp.src(list, {read: false})
+    gulp.src(list, { read: false, allowEmpty: true })
         .pipe(rm());
 }
 
@@ -75,24 +103,66 @@ function finalizeChrome(cb) {
     deleteFileList([
         "./dist/manifest-firefox.json",
         "./dist/js/common/firefoxpatch.js",
-        "./dist/css/styles-firefox.css"
+        "./dist/css/styles-firefox.css",
+        "./dist/css/option_styles-firefox.css",
+        "./dist/html/option_page-firefox.html"
     ]);
-    gulp.src("./dist/manifest-chrome.json")
+    gulp.src("./dist/manifest-chrome.json", { read: false, allowEmpty: true })
         .pipe(rename("manifest.json"))
         .pipe(gulp.dest("./dist"));
+
+    // make sure no double manifest files exist
+    deleteFileList(["./dist/manifest-chrome.json"])
+
+    minifyCss([
+        "!css/styles-firefox.css",
+        "!css/option_styles-firefox.css",
+    ])(()=>{});
+    minifyHtml([
+        "!html/option_page-firefox.html"
+    ])(()=>{});
+    minifyJs([
+        "!js/common/firefoxpatch.js",
+    ])(()=>{});
+    minifyManifest([
+        "!manifest-firefox.json",
+    ])(()=>{});
 
     return cb();
 }
-exports.finalizeChrome = finalizeChrome;
+exports.chrome = gulp.series([copyAll, finalizeChrome]);
 
 function finalizeFirefox(cb) {
-    deleteFileList([
-        "./dist/manifest-chrome.json",
-        "./dist/js/common/chromepatch.js",
-        "./dist/css/styles-chrome.css"
-    ]);
-    gulp.src("./dist/manifest-firefox.json")
-        .pipe(rename("manifest.json"))
-        .pipe(gulp.dest("./dist"));
+    minifyCss([
+        "!css/styles-chrome.css",
+        "!css/option_styles-chrome.css",
+    ])(()=>{});
+    minifyHtml([
+        "!html/option_page-chrome.html",
+    ])(()=>{});
+    minifyJs([
+        "!js/common/chromepatch.js",
+    ])(()=>{});
+    minifyManifest([
+        "!manifest-chrome.json",
+    ])(()=>{});
+
+    return cb();
 }
-exports.finalizeFirefox = finalizeFirefox;
+exports.firefox = gulp.series([copyAll, finalizeFirefox]);
+
+function cleanDist(cb) {
+    gulp.src(["./dist/**/*"], { read: false, allowEmpty: true })
+        .pipe(rm());
+    return cb();
+}
+exports.cleanDist = cleanDist;
+
+function cleanJs(cb) {
+    gulp.src(["./js/**/*"], { read: false, allowEmpty: true })
+        .pipe(rm());
+    return cb();
+}
+exports.cleanJs = cleanJs;
+
+exports.cleanAll = gulp.series([cleanDist, cleanJs])
