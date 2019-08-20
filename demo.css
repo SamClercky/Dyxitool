@@ -36,9 +36,9 @@ code, pre {
     font-family: OpenDyslexicMono !important;
 }
 p, li, span, code {
-    background: #00ecff00;
+    background: #3cab3b00;
     transition: background 0.2s;
 }
 p:hover, li:hover, span:hover, code:hover {
-    background: #00ecffff !important;
+    background: #3cab3bee !important;
 }

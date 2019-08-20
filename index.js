@@ -9,7 +9,7 @@ $(document).ready(function() {
 	$("#tryMe").on("click", () => {
 		if (demoCss.prop("disabled")) {
 			demoCss.prop("disabled", false);
-			$("#tryMe").html("End tour");
+			$("#tryMe").html("Stop tour");
 
 			if (!tourFinished) {
 				trip = new Trip([
@@ -20,14 +20,19 @@ $(document).ready(function() {
 					},
 					{
 						sel: $("#Tour2"),
-						content: "",
+						content: "When you hold your mouse on or touch some text, a special overlay will help you read the text better.",
+						expose: true
+					}, {
+						sel: $("#tryMeWrapper"),
+						content: "If you want to stop, click this button.",
 						expose: true
 					}
 				], {
 					showNavigation: true,
 					showCloseBox: true,
+					showSteps: true,
 					delay: -1,
-					tripTheme: "white"
+					tripTheme: "dark"
 				});
 				trip.start();
 				$("#tryMe").html("Stop trying");
