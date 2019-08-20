@@ -15,7 +15,7 @@ class Db {
             spacer: 1
         },
         markup: { // special markup on or off
-            value: true,
+            value: false,
             type: Type.checkbox,
             label: "Force easy reading mark-up",
             help: "",
@@ -29,7 +29,7 @@ class Db {
             spacer: 1
         },
         color: { // the color of the screen
-            value: Color.fromHex("#00ecff"),
+            value: Color.fromHex("#3cab3b"),
             type: Type.color,
             label: "Choose overlaycolor",
             help: "",
