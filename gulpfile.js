@@ -86,10 +86,21 @@ function copyImg(exceptions) {
 }
 exports.copyLib = copyImg([]);
 
-const copyAll = gulp.series([copyLib([]), copyFont([]), copyImg([])]);
+function copyLocales(exceptions) {
+    return cb => {
+        console.info(">>> copyLocales");
+        gulp.src(["./_locales/**/*", ...exceptions])
+            .pipe(jsonminify())
+            .pipe(gulp.dest("./dist/_locales"));
+        
+            return cb();
+    }
+}
+
+const copyAll = gulp.parallel([copyLib([]), copyFont([]), copyImg([]), copyLocales([])]);
 exports.copyAll = copyAll;
 
-const buildAll = gulp.series(minifyCss([]), minifyHtml([]), minifyJs([]), minifyManifest([]), copyAll);
+const buildAll = gulp.parallel(minifyCss([]), minifyHtml([]), minifyJs([]), minifyManifest([]), copyAll);
 
 exports.buildAll = buildAll;
 exports.default = buildAll;
@@ -100,20 +111,6 @@ function deleteFileList(list) {
 }
 
 function finalizeChrome(cb) {
-    deleteFileList([
-        "./dist/manifest-firefox.json",
-        "./dist/js/common/firefoxpatch.js",
-        "./dist/css/styles-firefox.css",
-        "./dist/css/option_styles-firefox.css",
-        "./dist/html/option_page-firefox.html"
-    ]);
-    gulp.src("./dist/manifest-chrome.json", { read: false, allowEmpty: true })
-        .pipe(rename("manifest.json"))
-        .pipe(gulp.dest("./dist"));
-
-    // make sure no double manifest files exist
-    deleteFileList(["./dist/manifest-chrome.json"])
-
     minifyCss([
         "!css/styles-firefox.css",
         "!css/option_styles-firefox.css",
