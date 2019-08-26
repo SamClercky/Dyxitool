@@ -1,0 +1,26 @@
+{
+    "dyslexicSettionLabel": {
+        "message": "Activeer dyxitool",
+        "description": "Label of dyslexic setting in option_page"
+    },
+    "fontSettionLabel": {
+        "message": "Activeer OpenDyslexic-lettertype",
+        "description": "Label of font setting in option_page"
+    },
+    "markupSettionLabel": {
+        "message": "Forceer lezermodus",
+        "description": "Label of markup setting in option_page"
+    },
+    "screenSettionLabel": {
+        "message": "Activeer tekst kleuring",
+        "description": "Label of screen setting in option_page"
+    },
+    "colorSettingLabel": {
+        "message": "Kies verkleuring",
+        "description": "Label of color setting in option_page"
+    },
+    "opacitySettingLabel": {
+        "message": "Doorzichtigheid",
+        "description": "Label of opacity setting in option_page"
+    }
+}

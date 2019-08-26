@@ -42,5 +42,6 @@
         "default_popup": "html/option_page-chrome.html",
         "default_title": "Dyxitool"
     },
-    "options_page": "html/option_page-chrome.html"
+    "options_page": "html/option_page-chrome.html",
+    "default_locale": "en"
 }

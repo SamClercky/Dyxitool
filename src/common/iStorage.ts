@@ -3,42 +3,42 @@ class Db {
         dyslexic: { // all settings on or off
             value: true,
             type: Type.checkbox,
-            label: "Activate dyslexic extension",
+            label: getBrowser().i18n.getMessage("dyslexicSettionLabel"),
             help: "",
             spacer: 0
         },
         font: { // font on of off
             value: true,
             type: Type.checkbox,
-            label: "Activate OpenDyslexic",
+            label: getBrowser().i18n.getMessage("fontSettionLabel"),
             help: "",
             spacer: 1
         },
         markup: { // special markup on or off
             value: false,
             type: Type.checkbox,
-            label: "Force easy reading mark-up",
+            label: getBrowser().i18n.getMessage("markupSettionLabel"),
             help: "",
             spacer: 1
         },
         screen: { // screen functionality on or off
             value: true,
             type: Type.checkbox,
-            label: "Activate overlay",
+            label: getBrowser().i18n.getMessage("screenSettionLabel"),
             help: "",
             spacer: 1
         },
         color: { // the color of the screen
             value: Color.fromHex("#3cab3b"),
             type: Type.color,
-            label: "Choose overlaycolor",
+            label: getBrowser().i18n.getMessage("colorSettingLabel"),
             help: "",
             spacer: 2
         },
         opacity: { // the opacity of the screen
             value: 0.8,
             type: Type.range,
-            label: "Opacity",
+            label: getBrowser().i18n.getMessage("opacitySettingLabel"),
             help: "",
             spacer: 2
         },

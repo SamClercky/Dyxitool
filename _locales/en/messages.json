@@ -1,0 +1,26 @@
+{
+    "dyslexicSettionLabel": {
+        "message": "Activate dyslexic extension",
+        "description": "Label of dyslexic setting in option_page"
+    },
+    "fontSettionLabel": {
+        "message": "Activate OpenDyslexic-typeface",
+        "description": "Label of font setting in option_page"
+    },
+    "markupSettionLabel": {
+        "message": "Force easy reading mark-up",
+        "description": "Label of markup setting in option_page"
+    },
+    "screenSettionLabel": {
+        "message": "Activate overlay",
+        "description": "Label of screen setting in option_page"
+    },
+    "colorSettingLabel": {
+        "message": "Choose overlaycolor",
+        "description": "Label of color setting in option_page"
+    },
+    "opacitySettingLabel": {
+        "message": "Opacity",
+        "description": "Label of opacity setting in option_page"
+    }
+}
