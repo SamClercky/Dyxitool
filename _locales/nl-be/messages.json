@@ -22,5 +22,17 @@
     "opacitySettingLabel": {
         "message": "Doorzichtigheid",
         "description": "Label of opacity setting in option_page"
+    },
+    "headerOptionPage": {
+        "message": "Opties",
+        "description": "Header of the option_page"
+    },
+    "goAndVisitLinkOptionPage": {
+        "message": "Ga naar",
+        "description": "Text in front of the link to the main website"
+    },
+    "issuesLinkOptionPage": {
+        "message": "Problemen gevonden? Klik hier",
+        "description": "Link to issues on option_page"
     }
 }

@@ -15,6 +15,7 @@
                 "<all_urls>"
             ],
             "js": [
+                "lib/browser-polyfill.min.js",
                 "js/common/chromepatch.js",
                 "js/common/logging.js",
                 "js/common/Color.js",
@@ -40,7 +41,8 @@
     "browser_action": {
         "default_icon": "img/icons/icon.png",
         "default_popup": "html/option_page-chrome.html",
-        "default_title": "Dyxitool"
+        "default_title": "Dyxitool",
+        "browser_style": true
     },
     "options_page": "html/option_page-chrome.html",
     "default_locale": "en"

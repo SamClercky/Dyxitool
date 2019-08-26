@@ -3,42 +3,42 @@ class Db {
         dyslexic: { // all settings on or off
             value: true,
             type: Type.checkbox,
-            label: getBrowser().i18n.getMessage("dyslexicSettionLabel"),
+            label: browser.i18n.getMessage("dyslexicSettionLabel"),
             help: "",
             spacer: 0
         },
         font: { // font on of off
             value: true,
             type: Type.checkbox,
-            label: getBrowser().i18n.getMessage("fontSettionLabel"),
+            label: browser.i18n.getMessage("fontSettionLabel"),
             help: "",
             spacer: 1
         },
         markup: { // special markup on or off
             value: false,
             type: Type.checkbox,
-            label: getBrowser().i18n.getMessage("markupSettionLabel"),
+            label: browser.i18n.getMessage("markupSettionLabel"),
             help: "",
             spacer: 1
         },
         screen: { // screen functionality on or off
             value: true,
             type: Type.checkbox,
-            label: getBrowser().i18n.getMessage("screenSettionLabel"),
+            label: browser.i18n.getMessage("screenSettionLabel"),
             help: "",
             spacer: 1
         },
         color: { // the color of the screen
             value: Color.fromHex("#3cab3b"),
             type: Type.color,
-            label: getBrowser().i18n.getMessage("colorSettingLabel"),
+            label: browser.i18n.getMessage("colorSettingLabel"),
             help: "",
             spacer: 2
         },
         opacity: { // the opacity of the screen
             value: 0.8,
             type: Type.range,
-            label: getBrowser().i18n.getMessage("opacitySettingLabel"),
+            label: browser.i18n.getMessage("opacitySettingLabel"),
             help: "",
             spacer: 2
         },
@@ -124,7 +124,7 @@ class Db {
      * @param name The name of the field to retrieve !CAUTION! name != "" or it will return Settings
      */
     async get(name: string): Promise<PackedSetting> {
-        const result = await getLocalStorage(name)
+        const result = await browser.storage.local.get(name)
 
         Log.info("GetMessage with name: " + name);
         Log.info(result);
@@ -145,7 +145,7 @@ class Db {
      * @throws When no data could be retrieved
      */
     async getAll(): Promise<Settings> {
-        const result: Settings = await getLocalStorage(null); // Gets all data at once
+        const result: Settings = await browser.storage.local.get(null); // Gets all data at once
         
         Log.info("getAll result:");
         Log.info(result);
@@ -216,7 +216,7 @@ class Db {
      * @param data The data to add
      */
     private insert(data: Setting): Promise<void> {
-        return getBrowser().storage.local.set(data);
+        return browser.storage.local.set(data);
     }
 
     /**
@@ -238,7 +238,7 @@ class Db {
     }
 
     onChange(cb: {(changes: browser.storage.StorageChange, name: string, area: string): void}): void {
-        getBrowser().storage.onChanged.addListener((changes, area) => {
+        browser.storage.onChanged.addListener((changes, area) => {
             const name = Object.keys(changes)[0];
             cb(changes[name], name, area)
         });

@@ -22,5 +22,17 @@
     "opacitySettingLabel": {
         "message": "Opacity",
         "description": "Label of opacity setting in option_page"
+    },
+    "headerOptionPage": {
+        "message": "Options",
+        "description": "Header of the option_page"
+    },
+    "goAndVisitLinkOptionPage": {
+        "message": "Go and visit",
+        "description": "Text in front of the link to the main website"
+    },
+    "issuesLinkOptionPage": {
+        "message": "Issues",
+        "description": "Link to issues on option_page"
     }
 }

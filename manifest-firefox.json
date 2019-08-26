@@ -20,6 +20,7 @@
         "<all_urls>"
       ],
       "js": [
+        "lib/browser-polyfill.min.js",
         "js/common/firefoxpatch.js",
         "js/common/logging.js",
         "js/common/Color.js",
