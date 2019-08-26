@@ -24,7 +24,7 @@ $(document).ready(function() {
 						expose: true
 					}, {
 						sel: $("#tryMeWrapper"),
-						content: "If you want to stop, click this button.",
+						content: "If you want to stop the experience, click this button and everything will go back as normal",
 						expose: true
 					}
 				], {
@@ -32,7 +32,11 @@ $(document).ready(function() {
 					showCloseBox: true,
 					showSteps: true,
 					delay: -1,
-					tripTheme: "dark"
+					tripTheme: "dark",
+					onTripChange: (tripIndex, tripObject) => {
+						console.log("Trip changed: ", tripIndex, tripObject);
+						$(".trip-block")[0].scrollIntoView();
+					}
 				});
 				trip.start();
 				$("#tryMe").html("Stop trying");
