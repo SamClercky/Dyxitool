@@ -48,7 +48,8 @@
     "default_locale": "en",
     "background": {
         "scripts": [
-          "js/background/main.ts"
+            "lib/browser-polyfill.min.js",
+            "js/background/main.js"
         ]
-      }
+    }
 }

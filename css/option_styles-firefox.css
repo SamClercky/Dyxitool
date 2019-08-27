@@ -1,13 +1,24 @@
 html {
-    width: max-content;
-    height: max-content;
-    max-width: 100vw;
+    min-width: max-content;
+    min-height: max-content;
 }
 body {
-    width: max-content;
-    height: max-content;
-    max-width: 100vw;
+    min-width: max-content;
+    min-height: max-content;
 }
+
+/* @media screen and (max-width: 800px) {
+    html {
+        width: max-content;
+        max-width: 100vw;
+        min-width: unset;
+    }
+    body {
+        width: max-content;
+        max-width: 100vw;
+        min-width: unset;
+    }
+} */
 
 /* Extra styles for firefox mobile */
 input[type="range"]::-moz-range-track {

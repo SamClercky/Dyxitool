@@ -53,7 +53,7 @@
   "default_locale": "en",
   "background": {
     "scripts": [
-      "js/background/main.ts"
+      "js/background/main.js"
     ]
   }
 }

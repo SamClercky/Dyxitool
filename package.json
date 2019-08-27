@@ -6,7 +6,7 @@
   "scripts": {
     "compile": "tsc -p .",
     "watch": "tsc -w",
-    "android": "web-ext run --target=firefox-android",
+    "android": "web-ext run --target=firefox-android --android-device=???????",
     "testFirefox": "web-ext run",
     "clean": "gulp cleanDist",
     "cleanAll": "gulp cleanAll",
