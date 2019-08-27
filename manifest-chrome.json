@@ -45,5 +45,10 @@
         "browser_style": true
     },
     "options_page": "html/option_page-chrome.html",
-    "default_locale": "en"
+    "default_locale": "en",
+    "background": {
+        "scripts": [
+          "js/background/main.ts"
+        ]
+      }
 }

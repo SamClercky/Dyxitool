@@ -50,5 +50,10 @@
     "page": "html/option_page-firefox.html",
     "browser_style": true
   },
-  "default_locale": "en"
+  "default_locale": "en",
+  "background": {
+    "scripts": [
+      "js/background/main.ts"
+    ]
+  }
 }
