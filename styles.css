@@ -167,6 +167,7 @@ button#tryMe:hover::after {
 /* Footer */
 footer {
     display: flex;
+    flex-direction: column;
     grid-area: footer;
     box-shadow: rgba(76, 76, 76, 0.5) 0px 0px 6px;
     background: white;
