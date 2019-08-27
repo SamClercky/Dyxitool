@@ -43,7 +43,7 @@ class AppPopup {
     private init() {
         Log.info("Db started, Init menu")
         this.createMenu()
-        this.initResetBtn()
+        // this.initResetBtn()
     }
 
     /**
