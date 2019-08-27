@@ -1,7 +1,9 @@
 {
     "manifest_version": 2,
     "name": "Dyxitool",
+    "short_name": "Dyxitool",
     "version": "1.1",
+    "author": "SamClercky",
     "description": "Extention to help people with dyslexi.",
     "icons": {
         "48": "img/icons/icon.png"
