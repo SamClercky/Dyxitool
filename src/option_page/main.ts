@@ -43,6 +43,32 @@ class AppPopup {
     private init() {
         Log.info("Db started, Init menu")
         this.createMenu()
+        this.initResetBtn()
+    }
+
+    /**
+     * Init for reset button on option_page
+     */
+    private initResetBtn(): void {
+        const resetBtn = $("#resetBtn")[0];
+        // @ts-ignore
+        resetBtn.disabled = false;
+
+        resetBtn.addEventListener("click", (async (evt: Event) => {
+            evt.preventDefault();
+
+            // reset data
+            await this.db.reset();
+
+            // rebuild settings
+            this.canStartToggle();
+
+            // set checkboxes
+            for (let elementName in this.elementData) {
+                this.setInputValues(this.db.getFromCache(elementName), this.elementData[elementName].input);
+            }
+
+        }).bind(this));
     }
 
     /**
@@ -64,6 +90,22 @@ class AppPopup {
         this.toggleData(
             this.db.getAllFromCache()
         )
+    }
+
+    /**
+     * Sets input values according to the setting and type
+     *
+     * @param   {Setting}           setting  The setting with the corresponding data
+     * @param   {HTMLInputElement}  element  The html element that should be set
+     */
+    private setInputValues(setting: Setting, element: HTMLInputElement): void {
+        if (setting.type == Type.range) {
+            element.value = (this.normalizeInput(setting.value) * 100).toString()
+        } else if (setting.type == Type.checkbox) {
+            element.checked = this.normalizeInput(setting.value)
+        } else if (setting.type == Type.color) {
+            element.value = "#" + (setting.value as BasicColor)._hex;
+        }
     }
 
     /**
@@ -107,10 +149,10 @@ class AppPopup {
             dataInput.setAttribute("max", "100")
             dataInput.setAttribute("min", "0")
 
-            dataInput.value = (this.normalizeInput(setting.value) * 100).toString()
+            this.setInputValues(setting, dataInput);
         } else if (setting.type == Type.checkbox) {
             dataInput.onchange = this.onChangeSet // onChange is type specific
-            dataInput.checked = this.normalizeInput(setting.value)
+            this.setInputValues(setting, dataInput);
         } else if (setting.type == Type.color) {
             // dataInput.value = Color.fromObject(setting.value as BasicColor).colorHex
             // Make shure this does not hide unintentionally

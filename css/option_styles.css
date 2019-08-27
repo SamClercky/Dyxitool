@@ -18,7 +18,7 @@ pre {
 h2 {
     margin: 0;
 }
-#wrapper {
+table {
     width: 100%;
 }
 input {
@@ -45,4 +45,12 @@ tr:hover {
 .spacer {
     height: 100%;
     margin-left: 20px;
+}
+/* Button section */
+#resetBtn {
+    padding: 3px;
+    margin: 2px;
+    background: red;
+    color: white;
+    border: rgb(177, 0, 0) solid 2px;
 }

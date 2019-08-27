@@ -27,6 +27,18 @@
         "message": "Options",
         "description": "Header of the option_page"
     },
+    "advancedHeading": {
+        "message": "Advanced",
+        "description": "Header advanced section on option_page"
+    },
+    "resetLbl": {
+        "message": "Reset all the settings to normal",
+        "description": "Label for the resetBtn"
+    },
+    "resetBtn": {
+        "message": "Reset",
+        "description": "Reset button in the option_page"
+    },
     "goAndVisitLinkOptionPage": {
         "message": "Go and visit",
         "description": "Text in front of the link to the main website"

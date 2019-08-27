@@ -99,14 +99,8 @@ class Db {
                 return;                
             } else {
                 // not yet initialized ==> create db in storage.local
+                await this.initData();
 
-                for (let i in Db.initialSettings) {
-                    this.insert(this.getSettingByName(i));
-                }
-
-                // make shure that it does not get intialized twise
-                this.update("_firstRunPassed", true);
-                
                 // tell everyone the db is ready and start program
                 this.ready = true;
                 if (this.onReadyCb != null) {
@@ -116,6 +110,26 @@ class Db {
         };
         init = init.bind(this);
         init()
+    }
+    
+    private async initData(): Promise<void> {
+    
+        for (let i in Db.initialSettings) {
+            await this.insert(this.getSettingByName(i));
+        }
+    
+        // make shure that it does not get intialized twise
+        this.update("_firstRunPassed", true);
+    }
+
+    async cleanData() {
+        this.localCache = {...Db.initialSettings};
+        return await browser.storage.local.clear();
+    }
+
+    async reset() {
+        await this.cleanData();
+        await this.initData();
     }
 
     // DB operations

@@ -16,7 +16,10 @@ $(document).ready(() => {
     [
         {itemName: "h2.heading",                iMessageName: "headerOptionPage"},
         {itemName: "#goAndVisitLinkOptionPage", iMessageName: "goAndVisitLinkOptionPage"},
-        {itemName: "#issuesLinkOptionPage",     iMessageName: "issuesLinkOptionPage"}
+        {itemName: "#issuesLinkOptionPage",     iMessageName: "issuesLinkOptionPage"},
+        {itemName: "#resetBtn",                 iMessageName: "resetBtn"},
+        {itemName: "#advancedHeading",          iMessageName: "advancedHeading"},
+        {itemName: "#resetLbl",                 iMessageName: "resetLbl"}
     ].forEach(item => {
         $(item.itemName).text(browser.i18n.getMessage(item.iMessageName));
     })

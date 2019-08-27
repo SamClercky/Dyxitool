@@ -27,6 +27,18 @@
         "message": "Opties",
         "description": "Header of the option_page"
     },
+    "advancedHeading": {
+        "message": "Geavanceerd",
+        "description": "Header advanced section on option_page"
+    },
+    "resetLbl": {
+        "message": "Herstel alle instellingen",
+        "description": "Label for the resetBtn"
+    },
+    "resetBtn": {
+        "message": "Herstel",
+        "description": "Reset button in the option_page"
+    },
     "goAndVisitLinkOptionPage": {
         "message": "Ga naar",
         "description": "Text in front of the link to the main website"
