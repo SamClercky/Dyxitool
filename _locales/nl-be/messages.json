@@ -12,15 +12,15 @@
         "description": "Label of markup setting in option_page"
     },
     "screenSettionLabel": {
-        "message": "Activeer tekst kleuring",
+        "message": "Activeer tekstkleur",
         "description": "Label of screen setting in option_page"
     },
     "colorSettingLabel": {
-        "message": "Kies verkleuring",
+        "message": "Kies een kleur",
         "description": "Label of color setting in option_page"
     },
     "opacitySettingLabel": {
-        "message": "Doorzichtigheid",
+        "message": "Graad doorzichtigheid",
         "description": "Label of opacity setting in option_page"
     },
     "headerOptionPage": {

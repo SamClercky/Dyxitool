@@ -4,11 +4,11 @@
         "description": "Label of dyslexic setting in option_page"
     },
     "fontSettionLabel": {
-        "message": "Activate OpenDyslexic-typeface",
+        "message": "Activate OpenDyslexic-font",
         "description": "Label of font setting in option_page"
     },
     "markupSettionLabel": {
-        "message": "Force easy reading mark-up",
+        "message": "Force easy reading markup",
         "description": "Label of markup setting in option_page"
     },
     "screenSettionLabel": {
