@@ -9,7 +9,7 @@ $(document).ready(function() {
 	$("#tryMe").on("click", () => {
 		if (demoCss.prop("disabled")) {
 			demoCss.prop("disabled", false);
-			$("#tryMe").html("Stop tour");
+			$("#tryMe").html("Stop demo");
 
 			if (!tourFinished) {
 				trip = new Trip([
@@ -24,7 +24,7 @@ $(document).ready(function() {
 						expose: true
 					}, {
 						sel: $("#tryMeWrapper"),
-						content: "If you want to stop the experience, click this button and everything will go back as normal",
+						content: "If you want to stop the experience, click this button and everything will go back to normal",
 						expose: true
 					}
 				], {
@@ -39,7 +39,7 @@ $(document).ready(function() {
 					}
 				});
 				trip.start();
-				$("#tryMe").html("Stop trying");
+				$("#tryMe").html("Stop demo");
 				tourFinished = true;
 			}
 		} else {
