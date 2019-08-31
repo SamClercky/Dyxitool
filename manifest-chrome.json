@@ -4,7 +4,7 @@
     "short_name": "Dyxitool",
     "version": "1.1",
     "author": "SamClercky",
-    "description": "The tool for people with dyslexia",
+    "description": "The extension to help people with dyslexia. All features are tested on real people with dyslexia.",
     "icons": {
         "16": "img/icons/icon16.png",
         "32": "img/icons/icon32/png",
