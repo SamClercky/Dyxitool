@@ -96,14 +96,14 @@ a {
 a:hover {
     color: inherit;
 }
-button:not(.download-button) {
+button {
     background: none;
     border: none;
     font-size: 1rem;
     text-align: center;
     color: #333;
 }
-button:not(.download-button)::after {
+button::after {
     content: "";
     position: relative;
     display: block;
@@ -114,8 +114,13 @@ button:not(.download-button)::after {
     background: #3cab3b;
     transition: width 0.25s;
 }
-button:not(.download-button):hover::after {
+button:hover::after {
     width: 105%;
+}
+/* Download button */
+img.download-button {
+    width: initial;
+    height: initial;
 }
 /* Trip specific styles */
 .trip-prev, .trip-skip, .trip-next {
@@ -207,7 +212,7 @@ footer p {
     }
 
     /* Actionlinks */
-    button:not(.download-button)::after {
+    button::after {
         width: 105%;
     }
 
