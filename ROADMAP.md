@@ -6,6 +6,12 @@ can participate in the debate.
 As the ideas improve and there is a consensus, they will be scheduled for the next release(s).
 
 ## 1.2 - Next release
+### Documentation
+* Adding developer documentation for new contributors
+
 ### Bug fixes
 * Fixing the list of wrong working websites (issue 2)
 * Better loading of the styles (async loading = better  (issue 3)
+
+## Planned but not yet scheduled
+* Adding new translations (fr) and improvements to existing locales (nl, nl-be)
