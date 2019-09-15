@@ -14,4 +14,8 @@ As the ideas improve and there is a consensus, they will be scheduled for the ne
 * Better loading of the styles (async loading = better  (issue 3)
 
 ## Planned but not yet scheduled
+### Bug fixes
 * Adding new translations (fr) and improvements to existing locales (nl, nl-be)
+
+### Comming features
+* Reset button for the settings
