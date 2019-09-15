@@ -46,5 +46,9 @@
     "issuesLinkOptionPage": {
         "message": "Problemen gevonden? Klik hier",
         "description": "Link to issues on option_page"
+    },
+    "versionNumberOptionPage": {
+        "message": "Versie",
+        "description": "Notion of the current version number on option_page"
     }
 }

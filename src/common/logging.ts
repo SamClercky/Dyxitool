@@ -1,5 +1,6 @@
 const DEBUGGING = true;
 const PREFIX = "dyxitool - ";
+const VERSION = "1.2.0";
 
 class Log {
     static info(msg: any) {

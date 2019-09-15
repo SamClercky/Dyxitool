@@ -19,8 +19,12 @@ $(document).ready(() => {
         {itemName: "#issuesLinkOptionPage",     iMessageName: "issuesLinkOptionPage"},
         {itemName: "#resetBtn",                 iMessageName: "resetBtn"},
         {itemName: "#advancedHeading",          iMessageName: "advancedHeading"},
-        {itemName: "#resetLbl",                 iMessageName: "resetLbl"}
+        {itemName: "#resetLbl",                 iMessageName: "resetLbl"},
+        {itemName: "#versionDescription",       iMessageName: "versionNumberOptionPage"}
     ].forEach(item => {
         $(item.itemName).text(browser.i18n.getMessage(item.iMessageName));
     })
+
+    // Show version number
+    $("#version").text(VERSION);
 })
