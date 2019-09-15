@@ -1,4 +1,4 @@
-const DEBUGGING = false;
+const DEBUGGING = true;
 const PREFIX = "dyxitool - ";
 
 class Log {
