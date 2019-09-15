@@ -2,12 +2,12 @@
     "manifest_version": 2,
     "name": "Dyxitool",
     "short_name": "Dyxitool",
-    "version": "1.1",
+    "version": "1.2.0",
     "author": "SamClercky",
     "description": "The extension to help people with dyslexia. All features are tested on real people with dyslexia.",
     "icons": {
         "16": "img/icons/icon16.png",
-        "32": "img/icons/icon32/png",
+        "32": "img/icons/icon32.png",
         "48": "img/icons/icon48.png",
         "128": "img/icons/icon128.png"
     },
@@ -23,6 +23,7 @@
                 "lib/browser-polyfill.min.js",
                 "js/common/chromepatch.js",
                 "js/common/logging.js",
+                "js/common/onload.js",
                 "js/common/Color.js",
                 "js/common/CommunicationInterface.js",
                 "js/common/iStorage.js",
