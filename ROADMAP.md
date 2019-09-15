@@ -9,9 +9,12 @@ As the ideas improve and there is a consensus, they will be scheduled for the ne
 ### Documentation
 * Adding developer documentation for new contributors
 
+### New features
+* Restyling option_page (better adaptation for mobile)
+
 ### Bug fixes
 * Fixing the list of wrong working websites (issue 2)
-* Better loading of the styles (async loading = better  (issue 3)
+* Better loading of the styles (async loading = better)  (issue 3)
 
 ## Planned but not yet scheduled
-* Adding new translations (fr) and improvements to existing locales (nl, nl-be)
+* Adding new translations (fr) and improvements to existing locales (nl)
