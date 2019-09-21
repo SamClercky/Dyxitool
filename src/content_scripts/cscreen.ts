@@ -18,7 +18,7 @@ class CScreen {
     private object: HTMLDivElement = null
 
     constructor() {
-        this.build()
+        OnLoad.addEventListener(OnEvent.DOMContentLoaded, this.build.bind(this)); // wait until everything is loaded
     }
 
     build() {

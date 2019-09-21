@@ -68,7 +68,7 @@ class AppScreen {
         this.preInit();
 
         // start on ready
-        this.db.onReady(this.init);
+        this.init();
     }
 
     /**
@@ -120,8 +120,12 @@ class AppScreen {
     /**
      * Async loading certain resources and styles ==> better performance
      * Should be run before init()
+     * 
+     * This function first needs to wait till DOM has been loaded
      */
     private async preInit() {
+        await OnLoad.waitTill(OnEvent.DOMContentLoaded);
+
         const font = insertCssFont() // add support for OpenDyslexic
         const layout = this.createLayoutItems();
 
@@ -133,8 +137,15 @@ class AppScreen {
     }
     /**
      * Defered constructor and entry of app
+     * 
+     * Waits till DOM and db are initialized
      */
     private async init() {
+        const waitDb = this.db.onReadyAsync();
+        const waitDOM = OnLoad.waitTill(OnEvent.DOMContentLoaded);
+        await Promise.all([waitDb, waitDOM]); // waiting ...
+
+        // start of program
         Log.info("Db started, init layout")
 
         // this.client.onResponse().then(settings => this.onNewData(settings))
@@ -204,7 +215,7 @@ class AppScreen {
      * Controls everything concerning the mechanics of the overlay
      */
     private async initBackground() {
-        Onload.addEventListener((() => {
+        OnLoad.addEventListener(OnEvent.DOMContentLoaded, (() => {
             const elementen = document.querySelectorAll(
                 [
                     "p", "span", "code",
