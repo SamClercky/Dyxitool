@@ -30,7 +30,7 @@ class CScreen {
 
         this.setVisible(true)
         this.object.style.position = "absolute"
-        this.object.style.zIndex = "1000"
+        this.object.style.zIndex = "100000"
         this.resetPos()
 
         const $this = this // context
