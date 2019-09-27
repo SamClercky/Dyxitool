@@ -1,0 +1,39 @@
+doctype html
+html(lang="en")
+    head
+        include includes/commonheaders.pug
+        title New Update
+        
+        link(rel="stylesheet" type="text/css" href="https://oss.maxcdn.com/jquery.trip.js/3.3.3/trip.min.css")
+        link(rel="stylesheet" type="text/css" href="/demo.css" id="demoCss")
+
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js")
+        script(src="https://oss.maxcdn.com/jquery.trip.js/3.3.3/trip.min.js")
+        script(type="text/javascript" src="/index.js")
+    body
+        #tryMeWrapper
+            button#tryMe Try me
+        #fullpage
+            main#frontPage
+                header
+                    div
+                        h1 Dyxitool
+                        pre Textadaptor for dyslexics
+                .con
+                    article.shadow
+                        h2 Welcome
+                        p#Tour2
+                            span#Tour1 W
+                            | elcome to the site of this beautiful project.
+                            | This project is an open source. It contains a tool for dyslexic people
+                            | to make reading on internet easier.
+                            | We used the OpenDyslexic-font, an award winning invention made for this purpose.
+                            | With this extention you can change all texts on a webpage.
+                            | Also a colored background can help better reading. You can use a color as the background
+                            | of the text when you move your cursor over the text. Have fun!
+            include includes/features.pug
+            include includes/settings.pug
+            include includes/download.pug
+            include includes/contribute.pug
+            include includes/license.pug
+            include includes/footer.pug

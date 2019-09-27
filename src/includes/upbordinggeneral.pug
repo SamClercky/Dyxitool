@@ -1,0 +1,18 @@
+doctype html
+html(lang="en")
+    head
+        include commonheaders.pug
+        title New Update
+    body
+        #fullpage
+            main#frontPage
+                header
+                    div
+                        h1 Dyxitool
+                        block VERSION
+                .con
+                    article.shadow
+                        block FEATURES
+            include license.pug
+            include contribute.pug
+            include footer.pug

@@ -1,0 +1,16 @@
+{
+  "name": "dyxitool-webiste",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build.js",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "author": "Sam Clercky",
+  "license": "ISC",
+  "dependencies": {
+    "glob": "^7.1.4",
+    "jstransformer-markdown-it": "^2.1.0",
+    "pug": "^2.0.4"
+  }
+}
