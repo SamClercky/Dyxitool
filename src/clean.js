@@ -1,7 +1,7 @@
 const fs = require("fs");
 const glob = require("glob");
 
-const FILES = "*.html";
+const FILES = "build/*.html";
 
 const files = glob.GlobSync(FILES).found;
 

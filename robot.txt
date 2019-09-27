@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /src
+Disallow: /lifecycle
+Disallow: /onbording.html
+Allow: /index.html
