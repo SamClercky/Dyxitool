@@ -21,8 +21,9 @@ body {
 } */
 
 /* Extra styles for firefox mobile */
-input[type="range"]::-moz-range-track {
+/* Obsolete now with new custom elements */
+/* input[type="range"]::-moz-range-track {
     height: 1px;
     width: 100%;
     background: black;
-}
+} */
