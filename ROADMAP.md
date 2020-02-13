@@ -18,3 +18,4 @@ As the ideas improve and there is a consensus, they will be scheduled for the ne
 
 ## Planned but not yet scheduled
 * Adding new translations (fr) and improvements to existing locales (nl)
+* Add the possibility to have different fonts.
