@@ -55,8 +55,10 @@ class Db {
 
     private onReadyCb: { (): void }[] = [];
 
-    private _dataName = "settings";
-    private ready = false;
+    public get isReady() : boolean {
+        return this.localCache._firstRunPassed.value as boolean;
+    }
+    
 
     /**
      * Packs the setting in a easy to use format
@@ -87,7 +89,6 @@ class Db {
             // if run for first time ==> initialize
             if (firstRunPassed != undefined && firstRunPassed.value == true) { // if it is not null
                 // already initialized ==> start program
-                this.ready = true
 
                 // update cache
                 this.localCache._firstRunPassed.value = true;
@@ -102,7 +103,6 @@ class Db {
                 await this.initData();
 
                 // tell everyone the db is ready and start program
-                this.ready = true;
                 if (this.onReadyCb != null) {
                     this.fireReady()
                 }
@@ -259,7 +259,7 @@ class Db {
     }
 
     onReady(cb: { (): void }) {
-        if (this.ready) cb() // return immediatly
+        if (this.isReady) cb() // return immediatly
         else this.onReadyCb.push(cb) // otherwise wait for being finished
     }
 

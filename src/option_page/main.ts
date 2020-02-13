@@ -5,7 +5,7 @@
 
 interface ElementDataValue {
     input: HTMLInputElement,
-    wrapper: HTMLTableRowElement,
+    wrapper: HTMLDivElement,
 }
 interface ElementData {
     dyslexic: ElementDataValue,
@@ -117,32 +117,32 @@ class AppPopup {
      * @return  {ElementDataValue}              Reference to the created input element and the tr-wrapper
      */
     private addElement(setting: Setting, id: string): ElementDataValue {
-        let settingWrapper = document.createElement("tr") as HTMLTableRowElement
-        let tdName = document.createElement("td") as HTMLTableDataCellElement
-        let tdData = document.createElement("td") as HTMLTableDataCellElement
+        let settingWrapper = document.createElement("div") as HTMLDivElement
+        let label = document.createElement("label") as HTMLLabelElement
         let dataInput = document.createElement("input") as HTMLInputElement
 
-        // set name
-        tdName.className = "text"
-        tdName.setAttribute("title", setting.help)
+        // set label properties
+        label.className = "text"
+        label.setAttribute("title", setting.help)
 
-        for (let i = 0; i < setting.spacer; i++) {
-            let divSpacer = document.createTextNode("\u00A0\u00A0")
-            tdName.appendChild(divSpacer)
-        }
-        tdName.appendChild(document.createTextNode(setting.label))
-
+        label.appendChild(document.createTextNode(setting.label))
+        label.setAttribute("for", id)
+        
         // Add elements to screen
         // This section needs to come before the set inputs-section
         dataInput.setAttribute("data", id)
-        tdData.appendChild(dataInput)
-        settingWrapper.appendChild(tdName)
-        settingWrapper.appendChild(tdData)
+        dataInput.id = id
+        
+        // Set settingswrapper
+        settingWrapper.setAttribute("data-spacer", setting.spacer.toString())
+        
+        settingWrapper.append(dataInput)
+        settingWrapper.appendChild(label)
         
         this.wrapper.appendChild(settingWrapper)
         
         // set inputs
-        tdData.className = "input"
+        // tdData.className = "input"
         dataInput.type = setting.type
         if (setting.type == Type.range) {
             dataInput.onchange = this.onChangeSet // onChange is type specific
@@ -150,6 +150,9 @@ class AppPopup {
             dataInput.setAttribute("min", "0")
 
             this.setInputValues(setting, dataInput);
+
+            // range specific logic
+            settingWrapper.classList.add("no-checkbox-wrapper");
         } else if (setting.type == Type.checkbox) {
             dataInput.onchange = this.onChangeSet // onChange is type specific
             this.setInputValues(setting, dataInput);
@@ -176,6 +179,18 @@ class AppPopup {
                     })
                 })
             });
+
+            // TODO: find better implementation to prevent default color-picker
+            dataInput.type = "text";
+
+            // color specific logic
+            settingWrapper.classList.add("no-checkbox-wrapper");
+
+            // settingWrapper.addEventListener("click", () => {
+            //     const colorInput = document.querySelector("div.sp-replacer") as HTMLDivElement
+            //     colorInput.click()
+            // })
+            
         }
 
         return {

@@ -2,6 +2,7 @@
 /// <reference path="../common/CommunicationInterface.ts" />
 /// <reference path="../common/iStorage.ts" />
 /// <reference path="../common/logging.ts" />
+/// <reference path="../common/onload.ts" />
 
 /// <reference path="./cscreen.ts" />
 /// <reference path="./insertCssFont.ts" />
@@ -14,7 +15,7 @@ interface Styles {
     markup: string
 }
 interface Element {
-    onmouseover: {(MouseEvent): void},
+    onmouseover: { (MouseEvent): void },
     offsetLeft: number,
     offsetTop: number,
     offsetWidth: number,
@@ -49,8 +50,8 @@ class AppScreen {
     readonly db = new Db()
     readonly cscreen = new CScreen()
     readonly prefabStyle: Styles = AppScreen.constructPrefabFont(this.cscreen);
-    readonly settingsStateNotifier: SettingsStateNotifier = new SettingsStateNotifier( this.db);
-    
+    readonly settingsStateNotifier: SettingsStateNotifier = new SettingsStateNotifier(this.db);
+
     private styleElements = {
         font: HTMLStyleElement,
         markup: HTMLStyleElement,
@@ -60,10 +61,12 @@ class AppScreen {
     enableBackground = false
 
     constructor() {
-        insertCssFont() // add support for OpenDyslexic
         // binding section
         this.init = this.init.bind(this);
         this.setLayoutFromSettings = this.setLayoutFromSettings.bind(this);
+
+        this.preInit();
+
         // start on ready
         this.db.onReady(this.init);
     }
@@ -80,28 +83,19 @@ class AppScreen {
 
         const fontSelectorExceptions = [
             "", // Anders ==> .fab:not(.glyphicon):not(...)
-            ".fab",
-            ".fa",
-            ".fas",
+            ".fa", ".fas", ".far", ".fal", ".fad", ".fab",
             ".glyphicon",
         ].reduce((prev, curr) => `${prev}:not(${curr})`);
 
         const fontSelectorNormal = [
             "", // Zie fontSelectorExceptions
-            "html",
-            "body",
-            "h1",
-            "h2",
-            "h3",
-            "h4",
-            "h5",
-            "h6",
-            "p",
-            "span",
+            "html", "body",
+            "h1", "h2", "h3", "h4", "h5", "h6",
+            "p", "span",
             "div",
             "a",
         ].map(item => (item === "") ? item : item + fontSelectorExceptions)
-        .reduce(concatSelectors);
+            .reduce(concatSelectors);
 
         const fontSelectorMono = [
             "", // Zie fontSelectorException
@@ -111,12 +105,10 @@ class AppScreen {
 
         const markupSelector = [
             "", // Zie fontSelectorException
-            "p",
-            "span",
+            "p", "span", "code",
             "div",
-            "code",
         ].reduce(concatSelectors);
-        
+
         return {
             "font": fontSelectorNormal + ' {font-family: "OpenDyslexic" !important; } ' + fontSelectorMono + '{font-family: OpenDyslexicMono !important;}',
             "color": "#" + cscreen.id + ' {background: {0} !important;}',
@@ -126,30 +118,39 @@ class AppScreen {
     }
 
     /**
+     * Async loading certain resources and styles ==> better performance
+     * Should be run before init()
+     */
+    private async preInit() {
+        const font = insertCssFont() // add support for OpenDyslexic
+        const layout = this.createLayoutItems();
+
+        await Promise.all([font, layout]);
+        if (!this.db.isReady) {
+            // If the main program hasn't run yet, provide basic settings
+            this.setDyslexicFalse();
+        }
+    }
+    /**
      * Defered constructor and entry of app
      */
-    private init(): void {
+    private async init() {
         Log.info("Db started, init layout")
 
         // this.client.onResponse().then(settings => this.onNewData(settings))
         this.settingsStateNotifier.onSettingsState(this.setLayoutFromSettings)
 
-        // this.initLayout()
-        this.createLayoutItems();
-        this.initBackground();
-
         // update layout
-        this.setLayoutFromSettings(this.db.getAllFromCache());
+        const background = this.initBackground();
+        const settings = this.setLayoutFromSettings(this.db.getAllFromCache());
+
+        await Promise.all([background, settings]);
     }
 
-    // private onNewData(data: PackedSetting) {
-    //     this.changeLayoutItem(data.name, data.value)
-    // }
-
-    private setLayoutFromSettings(settings: Settings): void {
+    private async setLayoutFromSettings(settings: Settings) {
         Log.info("Applying settings: ");
         Log.info(settings);
-        
+
         if (!settings.dyslexic.value) {
             // if master setting is false ==> stop everything and stop executing
             this.setDyslexicFalse();
@@ -202,36 +203,42 @@ class AppScreen {
     /**
      * Controls everything concerning the mechanics of the overlay
      */
-    private initBackground(): void {
-        let elementen = document.querySelectorAll("p, li, span, code, dd, dt, dl, th, td")
-        elementen.forEach(e => {
-            e.onmouseover = (evt: MouseEvent) => {
-                Log.info("mouseOverEvent detected")
-                // const shouldBeActive = this.db.getFromCache("screen").value as boolean;
-                const shouldBeActive = this.enableBackground;
+    private async initBackground() {
+        Onload.addEventListener((() => {
+            const elementen = document.querySelectorAll(
+                [
+                    "p", "span", "code",
+                    "li",
+                    "dd", "dt", "dl", "th", "td",
+                    "h1", "h2", "h3", "h4", "h5", "h6"
+                ].reduce((prev, curr) => `${prev}, ${curr}`)
+            )
+            elementen.forEach(e => {
+                e.onmouseover = (evt: MouseEvent) => {
+                    Log.info("mouseOverEvent detected")
+                    // const shouldBeActive = this.db.getFromCache("screen").value as boolean;
+                    const shouldBeActive = this.enableBackground;
 
-                this.cscreen.setVisible(shouldBeActive);
+                    this.cscreen.setVisible(shouldBeActive);
 
-                if (shouldBeActive) {
-                    // If active, set place ready
-                    this.cscreen.position = this.getPos(evt.target as Element)
-                    this.cscreen.resetPos()
+                    if (shouldBeActive) {
+                        // If active, set place ready
+                        this.cscreen.position = this.getPos(evt.target as Element)
+                        this.cscreen.resetPos()
+                    }
                 }
-            }
-        })
+            })
+        }).bind(this))
     }
 
     /**
-     * Creates a layout item
-     *
-     * @param   {string}   name   The name for the prefabstyle
-     * @param   {Setting}  value  The initial value for the style
+     * Creates the layout items
      *
      * @throws If no prefabstyle could be found
      */
-    private createLayoutItems() {
+    private async createLayoutItems() {
         for (let styleName in this.styleElements) {
-            let style = document.createElement("style") as HTMLStyleElement
+            const style = document.createElement("style") as HTMLStyleElement
             style.setAttribute("data", styleName);
             style.innerText = this.prefabStyle[styleName];
             document.head.appendChild(style);
@@ -240,9 +247,9 @@ class AppScreen {
     }
 
     private getPos(elem: Element): Rect {
-        let body = document.body
+        const body = document.body
 
-        let pos: Rect = {
+        const pos: Rect = {
             X: elem.offsetLeft,
             Y: elem.offsetTop,
             Width: elem.offsetWidth,
@@ -250,10 +257,10 @@ class AppScreen {
         }
 
         while (elem.offsetParent) {
-            let parent = elem.offsetParent
+            const parent = elem.offsetParent
             pos.X += parent.offsetLeft
             pos.Y += parent.offsetTop
-            
+
             if (elem == body) {
                 break
             } else {
@@ -265,17 +272,4 @@ class AppScreen {
     }
 }
 
-let app = new AppScreen() // start application
-
-// window.addEventListener("load", () => {
-//     // at load walk dom tree and eliminate glyphs
-//     setTimeout(async () => {await glyphprotection();}, 6000);
-//     // setInterval(async () => { await glyphprotection()}, 10000);
-// });
-// Log.debugRaw(app)
-// Log.info("App started!!!")
-
-// for debugging only
-// app.db.onChange((e) => {
-//     Log.debugRaw(e)
-// })
+const app = new AppScreen() // start application

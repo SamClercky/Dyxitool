@@ -46,5 +46,9 @@
     "issuesLinkOptionPage": {
         "message": "Issues",
         "description": "Link to issues on option_page"
+    },
+    "versionNumberOptionPage": {
+        "message": "Version",
+        "description": "Notion of the current version number on option_page"
     }
 }
