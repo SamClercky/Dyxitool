@@ -263,6 +263,12 @@ class Db {
         else this.onReadyCb.push(cb) // otherwise wait for being finished
     }
 
+    onReadyAsync() {
+        return new Promise<void>((res => {
+            this.onReady(() => res());
+        }).bind(this));
+    }
+
     private fireReady(): void {
         for (let cb of this.onReadyCb) {
             cb()
