@@ -5,17 +5,24 @@ can participate in the debate.
 
 As the ideas improve and there is a consensus, they will be scheduled for the next release(s).
 
-## 1.2 - Next release
+## 1.3 - Next release
+Expected release date: summer 2020
+### New features
+* Add the possibility to have different fonts issue #4.
+* Adding new translations (fr) and improvements to existing locales (nl)
+
+
+## 1.2 - Latest release
+Release date: Easter 2020
 ### Documentation
-* Adding developer documentation for new contributors
+* Adding developer documentation for new contributors [OK]
 
 ### New features
-* Restyling option_page (better adaptation for mobile)
+* Restyling option_page (better adaptation for mobile) [OK]
 
 ### Bug fixes
-* Fixing the list of wrong working websites (issue 2)
-* Better loading of the styles (async loading = better)  (issue 3)
+* Fixing the list of wrong working websites (issue 2) [OK]
+* Better loading of the styles (async loading = better)  (issue 3) [OK]
 
 ## Planned but not yet scheduled
-* Adding new translations (fr) and improvements to existing locales (nl)
-* Add the possibility to have different fonts.
+None
