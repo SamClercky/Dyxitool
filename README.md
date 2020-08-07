@@ -1,5 +1,8 @@
 # Dyxitool
 
+## Current status of the project
+The extension has been submitted to the Firefox webstore and for the first time to the Chrome webstore. The extension will be listed soon on both stores.
+
 This is a firefox and chrome extension that will help people with dyslexia.
 
 ## 1. Installing the plugin

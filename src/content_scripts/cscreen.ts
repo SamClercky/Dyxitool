@@ -34,7 +34,7 @@ class CScreen {
         this.resetPos()
 
         const $this = this // context
-        this.object.onclick = (e) => {
+        this.object.onclick = (e) => { // TODO: add css-property pointer-events: none to mitigate issue #5
             this.setVisible(false, $this)
 
             document.elementFromPoint(e.clientX, e.clientY).click()
