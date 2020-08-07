@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Dyxitool",
   "short_name": "Dyxitool",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "author": "SamClercky",
   "description": "The extension to help people with dyslexia. All features are tested on real people with dyslexia.",
   "icons": {

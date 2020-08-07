@@ -1,8 +1,29 @@
 {
-  "name": "dixytool",
-  "version": "1.2.0",
+  "name": "dyxitool",
+  "version": "1.3.0",
   "description": "A extension for firefox mobile to help people with dyslexia",
-  "main": "borderify.js",
+  "main": " ",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/chrome": "0.0.122",
+    "@types/firefox-webext-browser": "^78.0.1",
+    "@types/jquery": "^3.5.1",
+    "gulp": "^4.0.2",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-cli": "^2.3.0",
+    "gulp-jsonminify": "^1.1.0",
+    "gulp-minify-html": "^1.0.6",
+    "gulp-rename": "^2.0.0",
+    "gulp-rm": "^2.0.0",
+    "gulp-uglify": "^3.0.2",
+    "gulp-uglify-es": "^2.0.0",
+    "pump": "^3.0.0",
+    "typescript": "^3.9.7",
+    "web-ext": "^5.0.0"
+  },
   "scripts": {
     "compile": "tsc -p .",
     "watch": "tsc -w",
@@ -15,6 +36,10 @@
     "buildChrome": "gulp chrome",
     "push_android": "adb push dyxitool.xpi /mnt/sdcard"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SamClercky/Dyxitool.git"
+  },
   "keywords": [
     "firefox",
     "extension",
@@ -24,23 +49,8 @@
   ],
   "author": "Sam Clercky",
   "license": "ISC",
-  "dependencies": {
-    "@types/firefox-webext-browser": "^58.0.3"
+  "bugs": {
+    "url": "https://github.com/SamClercky/Dyxitool/issues"
   },
-  "devDependencies": {
-    "@types/chrome": "0.0.69",
-    "@types/jquery": "^3.3.4",
-    "gulp": "^4.0.2",
-    "gulp-clean-css": "^3.9.4",
-    "gulp-cli": "^2.2.0",
-    "gulp-jsonminify": "^1.1.0",
-    "gulp-minify-html": "^1.0.6",
-    "gulp-rename": "^1.4.0",
-    "gulp-rm": "^2.0.0",
-    "gulp-uglify": "^3.0.2",
-    "gulp-uglify-es": "^1.0.4",
-    "pump": "^3.0.0",
-    "typescript": "^3.5.3",
-    "web-ext": "^3.1.1"
-  }
+  "homepage": "https://github.com/SamClercky/Dyxitool#readme"
 }
