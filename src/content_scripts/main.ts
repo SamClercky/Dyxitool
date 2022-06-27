@@ -200,6 +200,7 @@ class AppScreen {
     private setScreen(option: boolean) {
         // @ts-ignore
         this.enableBackground = option;
+        this.cscreen.setVisible(this.enableBackground);
         Log.log("setScreen.disabled = " + !option);
     }
 

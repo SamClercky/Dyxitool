@@ -6,6 +6,11 @@ interface Rect {
 }
 
 class CScreen {
+    private readonly PADDING = 5; // px
+
+    private color = Color.BLACK
+    private object: HTMLDivElement = null
+
     id = this.genId()
     position: Rect = {
         X: 0,
@@ -13,9 +18,6 @@ class CScreen {
         Width: 0,
         Height: 0
     }
-    color = Color.BLACK
-
-    private object: HTMLDivElement = null
 
     constructor() {
         OnLoad.addEventListener(OnEvent.DOMContentLoaded, this.build.bind(this)); // wait until everything is loaded
@@ -27,11 +29,12 @@ class CScreen {
 
         // cosmetic improvemnt
         this.object.style.transition = "width 0.05s, height 0.05s, left 0.05s, top 0.05s";
+        this.object.style.borderRadius = this.PADDING + "px";
 
         this.setVisible(true)
         this.object.style.position = "absolute"
         this.object.style.zIndex = "100000"
-		this.object.style.pointerEvents = "none";
+        this.object.style.pointerEvents = "none";
         this.resetPos()
 
         const $this = this // context
@@ -50,7 +53,7 @@ class CScreen {
         let id = ""
         do {
             id = "uid" + (new Date()).getMilliseconds() + Math.floor(Math.random() * 1000);
-        } while(document.getElementById(id) != null)
+        } while (document.getElementById(id) != null)
 
         return id;
     }
@@ -60,11 +63,10 @@ class CScreen {
     }
 
     resetPos() {
-        this.object.style.left = this.position.X + "px"
-        this.object.style.top = this.position.Y + "px"
-        this.object.style.width = this.position.Width + "px"
-        this.object.style.height = this.position.Height + "px"
-        this.object.style.backgroundColor = this.color.colorHex
+        this.object.style.left = (this.position.X - this.PADDING) + "px"
+        this.object.style.top = (this.position.Y - this.PADDING) + "px"
+        this.object.style.width = (this.position.Width + this.PADDING * 2) + "px"
+        this.object.style.height = (this.position.Height + this.PADDING * 2) + "px"
         this.object.style.opacity = this.color.colorAlpha.toString()
     }
 
@@ -82,5 +84,5 @@ class CScreen {
 }
 
 interface Element {
-    click?: {(): void} // make the compiler quiet
+    click?: { (): void } // make the compiler quiet
 }
