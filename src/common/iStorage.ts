@@ -51,14 +51,14 @@ class Db {
         }
     };
 
-    private localCache: Settings = {...Db.initialSettings};
+    private localCache: Settings = { ...Db.initialSettings };
 
     private onReadyCb: { (): void }[] = [];
 
-    public get isReady() : boolean {
+    public get isReady(): boolean {
         return this.localCache._firstRunPassed.value as boolean;
     }
-    
+
 
     /**
      * Packs the setting in a easy to use format
@@ -66,17 +66,17 @@ class Db {
      * @returns false if not founded and {name: Setting} if found
      * @throws When name does not exist
      */
-    private getSettingByName(name: string): any {
+    private getSettingByName(name: keyof Settings): any {
         if (!this.dataExists(name)) throw Error("Data does not exist");
-        let result = {};
+        let result: Partial<Settings> = {};
         result[name] = this.localCache[name];
         return result;
     }
 
-    private dataExists(name: string): boolean {
+    private dataExists(name: keyof Settings): boolean {
         const result = Db.initialSettings[name];
         if (result == undefined) return false;
-        else                     return true;
+        else return true;
     }
 
     constructor() {
@@ -97,7 +97,7 @@ class Db {
                 if (this.onReadyCb != null) {
                     this.fireReady()
                 }
-                return;                
+                return;
             } else {
                 // not yet initialized ==> create db in storage.local
                 await this.initData();
@@ -111,19 +111,19 @@ class Db {
         init = init.bind(this);
         init()
     }
-    
+
     private async initData(): Promise<void> {
-    
+
         for (let i in Db.initialSettings) {
-            await this.insert(this.getSettingByName(i));
+            await this.insert(this.getSettingByName(i as keyof Settings));
         }
-    
+
         // make shure that it does not get intialized twise
         this.update("_firstRunPassed", true);
     }
 
     async cleanData() {
-        this.localCache = {...Db.initialSettings};
+        this.localCache = { ...Db.initialSettings };
         return await browser.storage.local.clear();
     }
 
@@ -159,8 +159,8 @@ class Db {
      * @throws When no data could be retrieved
      */
     async getAll(): Promise<Settings> {
-        const result: Settings = await browser.storage.local.get(null); // Gets all data at once
-        
+        const result: Settings | null = await browser.storage.local.get(null) as Settings | null; // Gets all data at once
+
         Log.info("getAll result:");
         Log.info(result);
 
@@ -181,9 +181,9 @@ class Db {
      * @return  {Setting}        The requested setting
      * @throws When no data is found
      */
-    getFromCache(name: string): Setting {
+    getFromCache(name: keyof Settings): Setting {
         if (!this.dataExists(name)) throw Error("No data found for " + name);
-        
+
         Log.info("getFromCacke with name: " + name);
         Log.info(this.localCache[name]);
 
@@ -214,8 +214,8 @@ class Db {
         Log.info(this.getAllFromCache());
     }
 
-    stripData(setting: object): PackedSetting {
-        let name = Object.keys(setting)[0]
+    stripData(setting: Partial<Settings>): PackedSetting {
+        let name = Object.keys(setting)[0] as keyof Settings
         let value = setting[name].value as SettingValue
 
         return {
@@ -238,7 +238,7 @@ class Db {
      * @param name The name of the value to change
      * @param value The new value
      */
-    async update(name: string, value: SettingValue): Promise<void> {
+    async update(name: keyof Settings, value: SettingValue): Promise<void> {
         if (!this.dataExists(name)) {
             throw Error("Value did not exist");
         }
@@ -251,9 +251,9 @@ class Db {
         this.insert(this.getSettingByName(name));
     }
 
-    onChange(cb: {(changes: browser.storage.StorageChange, name: string, area: string): void}): void {
+    onChange(cb: { (changes: browser.storage.StorageChange, name: keyof Settings, area: string): void }): void {
         browser.storage.onChanged.addListener((changes, area) => {
-            const name = Object.keys(changes)[0];
+            const name = Object.keys(changes)[0] as keyof Settings;
             cb(changes[name], name, area)
         });
     }
@@ -264,7 +264,7 @@ class Db {
     }
 
     onReadyAsync() {
-        return new Promise<void>((res => {
+        return new Promise<void>(((res: () => void) => {
             this.onReady(() => res());
         }).bind(this));
     }

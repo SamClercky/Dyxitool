@@ -2,12 +2,14 @@
     "compileOnSave": true,
     "compilerOptions": {
         "module": "system",
-        "noImplicitAny": false,
+        "noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": true,
         "outDir": "js",
         "sourceMap": true,
-        "target": "es6"
+        "target": "es2019",
+        "incremental": true,
+        "baseUrl": "./",
     },
     "include": [
         "src/**/*"

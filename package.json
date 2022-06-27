@@ -8,9 +8,10 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@types/chrome": "0.0.122",
-    "@types/firefox-webext-browser": "^78.0.1",
+    "@types/firefox-webext-browser": "^94.0.1",
     "@types/jquery": "^3.5.1",
+    "cypress": "^10.2.0",
+    "cypress-browser-extension-plugin": "^0.1.0",
     "gulp": "^4.0.2",
     "gulp-clean-css": "^4.3.0",
     "gulp-cli": "^2.3.0",
@@ -21,8 +22,8 @@
     "gulp-uglify": "^3.0.2",
     "gulp-uglify-es": "^2.0.0",
     "pump": "^3.0.0",
-    "typescript": "^3.9.7",
-    "web-ext": "^5.0.0"
+    "typescript": "^4.7.4",
+    "web-ext": "^7.1.0"
   },
   "scripts": {
     "compile": "tsc -p .",
@@ -34,7 +35,8 @@
     "buildFirefox": "gulp firefox",
     "firefox": "npm run buildFirefox && cd dist && web-ext build && cd .. && mv dist/web-ext-artifacts/dyxitool-1.1.zip dyxitool.xpi && rm -d dist/web-ext-artifacts",
     "buildChrome": "gulp chrome",
-    "push_android": "adb push dyxitool.xpi /mnt/sdcard"
+    "push_android": "adb push dyxitool.xpi /mnt/sdcard",
+    "cypress:open": "cypress open"
   },
   "repository": {
     "type": "git",

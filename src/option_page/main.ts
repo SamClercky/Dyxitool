@@ -65,7 +65,7 @@ class AppPopup {
 
             // set checkboxes
             for (let elementName in this.elementData) {
-                this.setInputValues(this.db.getFromCache(elementName), this.elementData[elementName].input);
+                this.setInputValues(this.db.getFromCache(elementName as keyof ElementData), this.elementData[elementName as keyof ElementData].input);
             }
 
         }).bind(this));
@@ -77,8 +77,8 @@ class AppPopup {
     private createMenu(): void {
         // fill _elementData
         for (let elementName in this.elementData) {
-            const setting = this.db.getFromCache(elementName);
-            this.elementData[elementName] = this.addElement(setting, elementName);
+            const setting = this.db.getFromCache(elementName as keyof ElementData);
+            this.elementData[elementName as keyof ElementData] = this.addElement(setting, elementName);
         }
         this.canStartToggle();
     }
@@ -127,20 +127,20 @@ class AppPopup {
 
         label.appendChild(document.createTextNode(setting.label))
         label.setAttribute("for", id)
-        
+
         // Add elements to screen
         // This section needs to come before the set inputs-section
         dataInput.setAttribute("data", id)
         dataInput.id = id
-        
+
         // Set settingswrapper
         settingWrapper.setAttribute("data-spacer", setting.spacer.toString())
-        
+
         settingWrapper.append(dataInput)
         settingWrapper.appendChild(label)
-        
+
         this.wrapper.appendChild(settingWrapper)
-        
+
         // set inputs
         // tdData.className = "input"
         dataInput.type = setting.type
@@ -162,7 +162,7 @@ class AppPopup {
             // @ts-ignore
             $(dataInput).spectrum({
                 color: (setting.value as BasicColor)._hex,
-                change: (color => {
+                change: ((color: any) => {
                     // Pack the plain color as a OnChangeEvent
                     // TODO: Find a more elegant way of doing this
                     this.onChangeSet({
@@ -170,7 +170,7 @@ class AppPopup {
                             // @ts-ignore
                             type: Type.color,
                             value: `#${color.toHex()}`,
-                            getAttribute: attrName => {
+                            getAttribute: (attrName: any) => {
                                 if (attrName !== "data") throw Error("Not supported")
 
                                 return id
@@ -190,7 +190,7 @@ class AppPopup {
             //     const colorInput = document.querySelector("div.sp-replacer") as HTMLDivElement
             //     colorInput.click()
             // })
-            
+
         }
 
         return {
@@ -216,7 +216,7 @@ class AppPopup {
             // may cause bug if Color is not updated
         }
         // save changes
-        this.db.update(target.getAttribute("data"), value as SettingValue)
+        this.db.update(target.getAttribute("data") as keyof Settings, value as SettingValue)
 
         this.toggleData(
             this.db.getAllFromCache()
@@ -317,10 +317,10 @@ class AppPopup {
             return raw;
         }
     }
-    private isNumeric(n) {
+    private isNumeric(n: any) {
         return !isNaN(parseFloat(n)) && isFinite(n);
     }
-    private isBool(b) {
+    private isBool(b: any) {
         switch (b) {
             case "true":
                 return true;

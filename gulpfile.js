@@ -53,17 +53,17 @@ function copyLib(exceptions) {
 }
 exports.copyLib = copyLib([]);
 
-function minifyManifest(exceptions) {
+function minifyManifest(browserSuffix, exceptions) {
     return cb => {
         console.info(">>> minifyManifest");
-        gulp.src(["./manifest*.json", ...exceptions])
+        gulp.src([`./manifest-${browserSuffix}.json`, ...exceptions])
             .pipe(jsonminify())
             .pipe(rename("manifest.json"))
             .pipe(gulp.dest("./dist"));
         return cb();
     }
 }
-exports.minifyManifest = minifyManifest([]);
+exports.minifyManifest = minifyManifest("firefox", []);
 
 function copyFont(exceptions) {
     return cb => {
@@ -92,8 +92,8 @@ function copyLocales(exceptions) {
         gulp.src(["./_locales/**/*", ...exceptions])
             .pipe(jsonminify())
             .pipe(gulp.dest("./dist/_locales"));
-        
-            return cb();
+
+        return cb();
     }
 }
 
@@ -114,16 +114,16 @@ function finalizeChrome(cb) {
     minifyCss([
         "!css/styles-firefox.css",
         "!css/option_styles-firefox.css",
-    ])(()=>{});
+    ])(() => { });
     minifyHtml([
         "!html/option_page-firefox.html"
-    ])(()=>{});
+    ])(() => { });
     minifyJs([
         "!js/common/firefoxpatch.js",
-    ])(()=>{});
-    minifyManifest([
+    ])(() => { });
+    minifyManifest("chrome", [
         "!manifest-firefox.json",
-    ])(()=>{});
+    ])(() => { });
 
     return cb();
 }
@@ -133,16 +133,16 @@ function finalizeFirefox(cb) {
     minifyCss([
         "!css/styles-chrome.css",
         "!css/option_styles-chrome.css",
-    ])(()=>{});
+    ])(() => { });
     minifyHtml([
         "!html/option_page-chrome.html",
-    ])(()=>{});
+    ])(() => { });
     minifyJs([
         "!js/common/chromepatch.js",
-    ])(()=>{});
-    minifyManifest([
+    ])(() => { });
+    minifyManifest("firefox", [
         "!manifest-chrome.json",
-    ])(()=>{});
+    ])(() => { });
 
     return cb();
 }
@@ -163,3 +163,13 @@ function cleanJs(cb) {
 exports.cleanJs = cleanJs;
 
 exports.cleanAll = gulp.series([cleanDist, cleanJs])
+
+function prepareBrowserInterfaceTesting(browserSuffix, cb) {
+    gulp.src([`./manifest-${browserSuffix}.json`])
+        .pipe(rename("manifest.json"))
+        .pipe(gulp.dest("./"));
+    return cb();
+}
+
+exports.manifestFirefox = (cb) => prepareBrowserInterfaceTesting("firefox", cb);
+exports.manifestChrome = (cb) => prepareBrowserInterfaceTesting("chrome", cb);

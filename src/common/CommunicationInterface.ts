@@ -15,7 +15,7 @@ interface Setting {
     spacer: number
 }
 interface PackedSetting {
-    name: string,
+    name: keyof Settings,
     value: SettingValue
 }
 enum Type {

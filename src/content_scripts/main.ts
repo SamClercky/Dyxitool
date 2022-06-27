@@ -12,24 +12,32 @@ interface Styles {
     font: string,
     color: string,
     opacity: string,
-    markup: string
+    markup: string,
 }
+
+interface StyleElements {
+    font: HTMLStyleElement,
+    color: HTMLStyleElement,
+    opacity: HTMLStyleElement,
+    markup: HTMLStyleElement,
+}
+
 interface Element {
-    onmouseover: { (MouseEvent): void },
+    onmouseover: { (evt: MouseEvent): void },
     offsetLeft: number,
     offsetTop: number,
     offsetWidth: number,
     offsetHeight: number,
-    offsetParent: Element
+    offsetParent: Element,
 }
 interface String {
     format: any
 }
 
 // code from: https://www.codeproject.com/Tips/201899/String-Format-in-JavaScript
-String.prototype.format = function (args) {
+String.prototype.format = function (args: any[]) {
     var str = this;
-    return str.replace(String.prototype.format.regex, function (item) {
+    return str.replace(String.prototype.format.regex, function (item: String) {
         var intVal = parseInt(item.substring(1, item.length - 1));
         var replace;
         if (intVal >= 0) {
@@ -52,11 +60,11 @@ class AppScreen {
     readonly prefabStyle: Styles = AppScreen.constructPrefabFont(this.cscreen);
     readonly settingsStateNotifier: SettingsStateNotifier = new SettingsStateNotifier(this.db);
 
-    private styleElements = {
-        font: HTMLStyleElement,
-        markup: HTMLStyleElement,
-        opacity: HTMLStyleElement,
-        color: HTMLStyleElement,
+    private styleElements: StyleElements = {
+        font: document.createElement("style"),
+        markup: document.createElement("style"),
+        opacity: document.createElement("style"),
+        color: document.createElement("style"),
     }
     enableBackground = false
 
@@ -84,7 +92,7 @@ class AppScreen {
         const fontSelectorExceptions = [
             "", // Anders ==> .fab:not(.glyphicon):not(...)
             ".fa", ".fas", ".far", ".fal", ".fad", ".fab",
-            ".glyphicon",
+            ".glyphicon", "[aria-hidden=true]"
         ].reduce((prev, curr) => `${prev}:not(${curr})`);
 
         const fontSelectorNormal = [
@@ -251,9 +259,9 @@ class AppScreen {
         for (let styleName in this.styleElements) {
             const style = document.createElement("style") as HTMLStyleElement
             style.setAttribute("data", styleName);
-            style.innerText = this.prefabStyle[styleName];
+            style.innerText = this.prefabStyle[styleName as keyof Styles];
             document.head.appendChild(style);
-            this.styleElements[styleName] = style;
+            this.styleElements[styleName as keyof StyleElements] = style;
         }
     }
 

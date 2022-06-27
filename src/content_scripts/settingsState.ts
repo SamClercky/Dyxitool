@@ -1,10 +1,10 @@
-type OnStateChangedFunc = {(settingsState: Settings): void};
+type OnStateChangedFunc = { (settingsState: Settings): void };
 
 class SettingsStateNotifier {
     private onStateChange: OnStateChangedFunc[] = []
 
     constructor(storage: Db) {
-        storage.onChange((changes, name, area) => {
+        storage.onChange((changes, name: keyof Settings, area) => {
             storage.updateCache({
                 name: name,
                 value: changes.newValue.value
