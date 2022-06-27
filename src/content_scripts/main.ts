@@ -85,18 +85,16 @@ class AppScreen {
      * @returns The needed styles with selectors
      */
     private static constructPrefabFont(cscreen: CScreen): Styles {
-        const concatSelectors = (prev: string, curr: string) => {
-            return (prev === "") ? curr : `${prev}, ${curr}`;
-        }
+        const concatSelectors = (prev: string, curr: string) => `${prev}, ${curr}`;
 
         const fontSelectorExceptions = [
-            "", // Anders ==> .fab:not(.glyphicon):not(...)
             ".fa", ".fas", ".far", ".fal", ".fad", ".fab",
             ".glyphicon", "[aria-hidden=true]"
-        ].reduce((prev, curr) => `${prev}:not(${curr})`);
+        ]
+            .map(curr => `:not(${curr})`)
+            .reduce((prev, curr) => prev + curr);
 
         const fontSelectorNormal = [
-            "", // Zie fontSelectorExceptions
             "html", "body",
             "h1", "h2", "h3", "h4", "h5", "h6",
             "p", "span",
@@ -106,13 +104,11 @@ class AppScreen {
             .reduce(concatSelectors);
 
         const fontSelectorMono = [
-            "", // Zie fontSelectorException
             "code",
             "pre",
         ].reduce(concatSelectors);
 
         const markupSelector = [
-            "", // Zie fontSelectorException
             "p", "span", "code",
             "div",
         ].reduce(concatSelectors);
