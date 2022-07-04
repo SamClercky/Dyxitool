@@ -10,8 +10,6 @@
   "devDependencies": {
     "@types/firefox-webext-browser": "^94.0.1",
     "@types/jquery": "^3.5.1",
-    "cypress": "^10.2.0",
-    "cypress-browser-extension-plugin": "^0.1.0",
     "gulp": "^4.0.2",
     "gulp-clean-css": "^4.3.0",
     "gulp-cli": "^2.3.0",
@@ -36,7 +34,6 @@
     "firefox": "npm run buildFirefox && cd dist && web-ext build && cd .. && mv dist/web-ext-artifacts/dyxitool-1.1.zip dyxitool.xpi && rm -d dist/web-ext-artifacts",
     "buildChrome": "gulp chrome",
     "push_android": "adb push dyxitool.xpi /mnt/sdcard",
-    "cypress:open": "cypress open"
   },
   "repository": {
     "type": "git",
