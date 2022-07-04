@@ -59,7 +59,8 @@ div.no-checkbox-wrapper {
     align-items: start !important;
 }
 
-div.no-checkbox-wrapper>input, div.no-checkbox-wrapper>.sp-replacer {
+div.no-checkbox-wrapper>input,
+div.no-checkbox-wrapper>.sp-replacer {
     order: 1;
     margin: 1rem;
 }
@@ -72,8 +73,9 @@ div input[type="range"] {
 /* Custom inputs */
 
 @supports(-webkit-appearance: none) or (-moz-appearance: none) {
-    input[type='checkbox'], input[type="range"]
-        {
+
+    input[type='checkbox'],
+    input[type="range"] {
         -webkit-appearance: none;
         -moz-appearance: none;
     }
@@ -151,6 +153,19 @@ input[type=range]::-moz-range-track {
     cursor: pointer;
     background: #204d74;
     border-radius: 1.3px;
+}
+
+#wrapper>.input-wrapper {
+    transition-property: height, padding, margin;
+    transition-duration: 0.2s;
+}
+
+#wrapper>.input-wrapper.hidden {
+    overflow: hidden;
+
+    height: 0px;
+    padding: 0px;
+    margin: 0px;
 }
 
 /* Button section */

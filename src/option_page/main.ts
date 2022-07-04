@@ -138,6 +138,7 @@ class AppPopup {
 
         settingWrapper.append(dataInput)
         settingWrapper.appendChild(label)
+        settingWrapper.classList.add("input-wrapper");
 
         this.wrapper.appendChild(settingWrapper)
 
@@ -239,31 +240,30 @@ class AppPopup {
     }
 
     private toggleNonScreen(option: boolean) {
-        const font = $(this.elementData.font.wrapper);
-        const markup = $(this.elementData.markup.wrapper);
-        const screen = $(this.elementData.screen.wrapper);
-
-        if (option) {
-            font.slideDown(this.durationObject);
-            markup.slideDown(this.durationObject);
-            screen.slideDown(this.durationObject);
-        } else {
-            font.slideUp(this.durationObject);
-            markup.slideUp(this.durationObject);
-            screen.slideUp(this.durationObject);
-        }
+        this.toggleSettingItem("font", option);
+        this.toggleSettingItem("markup", option);
+        this.toggleSettingItem("screen", option);
     }
 
     private toggleScreen(option: boolean) {
-        const color = $(this.elementData.color.wrapper);
-        const opacity = $(this.elementData.opacity.wrapper);
+        this.toggleSettingItem("color", option);
+        this.toggleSettingItem("opacity", option);
+    }
 
-        if (option) {
-            color.slideDown(this.durationObject);
-            opacity.slideDown(this.durationObject);
-        } else {
-            color.slideUp(this.durationObject);
-            opacity.slideUp(this.durationObject);
+    /**
+     * Set visibility for given item based on given option
+     * @param element The element that should be changed
+     * @param option true to make visible
+     */
+    private toggleSettingItem(element: keyof ElementData, option: boolean) {
+        const hiddenClass = "hidden";
+
+        const wrapper = this.elementData[element].wrapper;
+        const isHidden = wrapper.classList.contains(hiddenClass);
+        if (isHidden && option) { // make visible
+            wrapper.classList.remove(hiddenClass);
+        } else if (!isHidden && !option) { // hide
+            wrapper.classList.add(hiddenClass);
         }
     }
 
